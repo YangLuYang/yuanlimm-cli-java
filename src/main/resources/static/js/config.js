@@ -14,7 +14,7 @@ function getStockList() {
         $.each(result.data, function (i, stock) {
             $stockCode.append("<option value='" + stock.code + "'>" + stock.name + "</option>");
         });
-    });
+    }, false);
     $stockCode.prepend("<option value=\"\" selected=\"\">Please Select...</option>");
 }
 

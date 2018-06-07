@@ -2,11 +2,13 @@
  * get请求
  * @param url 请求的url地址
  * @param fn 成功的回调函数
+ * @param async 异步
  */
-function ajaxGet(url, fn) {
+function ajaxGet(url, fn, async) {
     $.ajax({
         url: url,
         type: 'get',
+        async: async ? async : async !== false,
         beforeSend: function (xhr) {
         },
         success: function (result) {
@@ -27,12 +29,14 @@ function ajaxGet(url, fn) {
  * @param url 请求的url地址
  * @param data data请求数据
  * @param fn 成功的回调函数
+ * @param async 异步
  */
-function ajaxPost(url, data, fn) {
+function ajaxPost(url, data, fn, async) {
     $.ajax({
         url: url,
         type: 'post',
         timeout: 30000,
+        async: async ? async : async !== false,
         contentType: 'application/json',
         data: data ? JSON.stringify(data) : null,
         beforeSend: function (xhr) {
@@ -55,13 +59,15 @@ function ajaxPost(url, data, fn) {
  * @param url 请求的url地址
  * @param data 数据
  * @param fn 成功的回调函数
+ * @param async 异步
 
  */
-function ajaxDelete(url, data, fn) {
+function ajaxDelete(url, data, fn, async) {
     $.ajax({
         url: url,
         type: 'delete',
         timeout: 30000,
+        async: async ? async : async !== false,
         contentType: 'application/json',
         data: data ? JSON.stringify(data) : null,
         beforeSend: function (xhr) {
@@ -84,11 +90,13 @@ function ajaxDelete(url, data, fn) {
  * @param url 请求的url地址
  * @param data data请求数据
  * @param fn 成功的回调函数
+ * @param async 异步
  */
-function ajaxPut(url, data, fn) {
+function ajaxPut(url, data, fn, async) {
     $.ajax({
         url: url,
         type: 'put',
+        async: async ? async : async !== false,
         contentType: 'application/json',
         data: data ? JSON.stringify(data) : null,
         beforeSend: function (xhr) {
@@ -111,11 +119,13 @@ function ajaxPut(url, data, fn) {
  * @param url 请求的url地址
  * @param data data请求数据
  * @param fn 成功的回调函数
+ * @param async 异步
  */
-function ajaxPatch(url, data, fn) {
+function ajaxPatch(url, data, fn, async) {
     $.ajax({
         url: url,
         type: 'patch',
+        async: async ? async : async !== false,
         contentType: 'application/json',
         data: data ? JSON.stringify(data) : null,
         beforeSend: function (xhr) {
