@@ -1,6 +1,6 @@
 # 援力满满 - 许愿工具的Java实现
 ## 介绍
-本项目是 援力满满 二次元虚拟股市 基于官方工具的Java实现版本
+本项目是 [援力满满 二次元虚拟股市](https://www.yuanlimm.com/) 基于[官方工具](https://github.com/bydmm/yuanlimm-cli)的Java实现版本  
 本工具具有console和web两种模式:
 * web模式通过web页面配置启动参数
 * console模式通过启动参数或者控制台配置运行参数
