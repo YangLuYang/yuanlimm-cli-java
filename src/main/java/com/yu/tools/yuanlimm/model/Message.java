@@ -4,6 +4,7 @@ import com.yu.tools.yuanlimm.enums.MessageStatus;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class Message {
+public class Message implements Serializable {
 
     /**
      * 类型

@@ -3,12 +3,14 @@ package com.yu.tools.yuanlimm.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 /**
  * 错误信息
  */
 @Getter
 @Setter
-public class ErrorMessage extends Message {
+public class ErrorMessage extends Message implements Serializable {
     /**
      * 错误码
      */

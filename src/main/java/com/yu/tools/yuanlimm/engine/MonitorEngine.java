@@ -61,7 +61,8 @@ public class MonitorEngine {
      */
     @Scheduled(fixedDelay = 1000L)
     public void output() {
-        if (controlEngine.getSYSTEM_STATUS().equals(SystemStatus.stopped)) {
+        if (controlEngine.getSYSTEM_STATUS().equals(SystemStatus.stopped)
+                || controlEngine.getSYSTEM_STATUS().equals(SystemStatus.needConfig)) {
             return;
         }
 
