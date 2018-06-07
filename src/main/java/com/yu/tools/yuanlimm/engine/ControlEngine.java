@@ -138,6 +138,8 @@ public class ControlEngine {
                     .filter(number -> number <= 4)
                     .orElse(16);
 
+            this.SYSTEM_STATUS = SystemStatus.stopped;
+
             this.startService();
         }
     }
