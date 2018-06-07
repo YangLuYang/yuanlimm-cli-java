@@ -43,6 +43,16 @@ java -jar ./xxxx.jar \
 
 --config.walletAddress: 股票代码，比如英梨梨的地址：https://www.yuanlimm.com/#/stock/ERIRI，的股票代码是ERIRI，
 
+## 截图
+* Web端
+![](https://ws1.sinaimg.cn/large/728aabffgy1fs2ywwbntej22i81reh0f.jpg)
+![](https://ws1.sinaimg.cn/large/728aabffgy1fs2ywwdpydj22i81re4h2.jpg)
+![](https://ws1.sinaimg.cn/large/728aabffgy1fs2ywwb320j22i81reh2w.jpg)
+![](https://ws1.sinaimg.cn/large/728aabffgy1fs2ywwh4x7j22i81retos.jpg)
+
+* Console端
+![](https://ws1.sinaimg.cn/large/728aabffgy1fs2z1k2ixsj21w80tqqcl.jpg)
+
 ## 支持
 
 官方QQ群：774800449  @Yu
