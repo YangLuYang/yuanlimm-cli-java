@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Config</title>
+    <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/fonts/ionicons.min.css">
+    <link rel="stylesheet" href="./assets/animate/animate.css">
+    <link rel="stylesheet" href="./assets/pnotify/pnotify.css">
+</head>
+
+<body>
+<div class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient">
+    <div class="container"><a class="navbar-brand logo" href="#">YuanLiManMan v5</a>
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item" role="presentation"><a class="nav-link active" href="index.html">Home</a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="statistic.html">Statistic</a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="log.html">Log</a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="config.html">Config</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="page hire-me-page">
+    <section class="portfolio-block hire-me">
+        <div class="container">
+            <div class="heading">
+                <h2>System Config</h2>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label for="ipt_stock_code">Stock</label>
+                    <select class="form-control" id="ipt_stock_code">
+                        <option value="" selected="">Please Select...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="ipt_wallet_address">Wallet Address</label>
+                    <input class="form-control" type="text" id="ipt_wallet_address"
+                           placeholder="Please input wallet address.">
+                </div>
+                <div class="form-group">
+                    <label for="ipt_cheer_word">Cheer Word</label>
+                    <input class="form-control" type="text" id="ipt_cheer_word" placeholder="Please input cheer word.">
+                </div>
+                <div class="form-group">
+                    <label for="ipt_compute_thread">Compute Thread</label>
+                    <select class="form-control" id="ipt_compute_thread">
+                        <option value="" selected="">Please Select...</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col-md-12 button">
+                            <button class="btn btn-primary btn-block btn-lg" type="button" id="btn_update">
+                                Update
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+</body>
+<script src="./assets/js/jquery.min.js"></script>
+<script src="./assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="./assets/js/theme.js"></script>
+<script src="./assets/pnotify/pnotify.js"></script>
+<script src="./js/common.js"></script>
+<script src="./js/config.js"></script>
+</html>
