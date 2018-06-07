@@ -149,7 +149,7 @@ public class ComputeEngine {
         int left = hard % 8;
 
         if (left > 0) {
-            if (bytes[bytes.length - zero - 1] << (8 - left) != 0) {
+            if ((byte) (bytes[bytes.length - zero - 1] << (8 - left)) != 0) {
                 return;
             }
         }

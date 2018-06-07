@@ -131,16 +131,11 @@ public class ControlEngine {
 
             scanner.close();
 
-            this.COMPUTE_THREAD = Optional.ofNullable(this.COMPUTE_THREAD)
-                    .filter(number -> number <= 16)
-                    .orElse(16);
-            this.REQUEST_THREAD = Optional.ofNullable(this.REQUEST_THREAD)
-                    .filter(number -> number <= 4)
-                    .orElse(16);
-
-            this.SYSTEM_STATUS = SystemStatus.stopped;
+            this.updateConfig();
 
             this.startService();
+        } else {
+            this.updateConfig();
         }
     }
 
@@ -159,7 +154,7 @@ public class ControlEngine {
         computeEngine.start();
         requestEngine.start();
         this.SYSTEM_STATUS = SystemStatus.running;
-        System.out.println("System has been started.");
+        System.out.println("Service has been started.");
     }
 
     /**
@@ -173,7 +168,14 @@ public class ControlEngine {
         computeEngine.stop();
         requestEngine.stop();
         this.SYSTEM_STATUS = SystemStatus.stopped;
-        System.out.println("System has been stopped.");
+        System.out.println("Service has been stopped.");
+    }
+
+    /**
+     * 更新系统配置
+     */
+    public void updateConfig() {
+        this.updateConfig(this.COMPUTE_THREAD, this.WALLET_ADDRESS, this.STOCK_CODE, this.CHEER_WORD);
     }
 
     /**
@@ -191,10 +193,21 @@ public class ControlEngine {
             this.stopService();
         }
 
-        this.COMPUTE_THREAD = computeThread;
+        this.COMPUTE_THREAD = Optional.ofNullable(computeThread)
+                .map(number -> Optional.of(number)
+                        .filter(num -> num > 0)
+                        .orElseThrow(() -> new BusinessException("输入的计算线程数不合法.")))
+                .map(number -> Optional.of(number)
+                        .filter(num -> num <= 16)
+                        .orElse(16))
+                .orElse(null);
         this.WALLET_ADDRESS = walletAddress;
         this.STOCK_CODE = stockCode;
         this.CHEER_WORD = cheerWord;
+
+        this.REQUEST_THREAD = Optional.ofNullable(this.REQUEST_THREAD)
+                .filter(number -> number <= 4)
+                .orElse(4);
 
         if (this.COMPUTE_THREAD != null
                 && StringUtils.isNotBlank(this.WALLET_ADDRESS)
