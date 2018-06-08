@@ -32,7 +32,7 @@ public class ControlEngine {
      */
     @Getter
     @Setter
-    @Value("${config.systemMode:web}")
+    @Value("${config.systemMode:auto}")
     private SystemMode SYSTEM_MODE;
     /**
      * 请求线程数
@@ -113,29 +113,40 @@ public class ControlEngine {
 
         Optional.ofNullable(this.getHashHard()).ifPresent(number -> this.HASH_HARD = number);
 
-        if (this.SYSTEM_MODE.equals(SystemMode.console)) {
-            Scanner scanner = new Scanner(System.in);
-
-            if (StringUtils.isBlank(this.WALLET_ADDRESS)) {
-                this.WALLET_ADDRESS = inputWalletAddress(scanner);
+        switch (this.SYSTEM_MODE) {
+            case auto: {
+                this.updateConfig();
+                if (this.SYSTEM_STATUS.equals(SystemStatus.stopped)) {
+                    this.startService();
+                }
             }
+            break;
+            case console: {
+                Scanner scanner = new Scanner(System.in);
 
-            if (Objects.isNull(this.COMPUTE_THREAD)) {
-                this.COMPUTE_THREAD = inputComputeThread(scanner);
+                if (StringUtils.isBlank(this.WALLET_ADDRESS)) {
+                    this.WALLET_ADDRESS = inputWalletAddress(scanner);
+                }
+
+                if (Objects.isNull(this.COMPUTE_THREAD)) {
+                    this.COMPUTE_THREAD = inputComputeThread(scanner);
+                }
+
+                if (StringUtils.isBlank(this.STOCK_CODE)) {
+                    Stock stock = stockChoice(scanner);
+                    this.STOCK_CODE = stock.getCode();
+                }
+
+                scanner.close();
+
+                this.updateConfig();
+                this.startService();
             }
-
-            if (StringUtils.isBlank(this.STOCK_CODE)) {
-                Stock stock = stockChoice(scanner);
-                this.STOCK_CODE = stock.getCode();
+            break;
+            case web: {
+                this.updateConfig();
             }
-
-            scanner.close();
-
-            this.updateConfig();
-
-            this.startService();
-        } else {
-            this.updateConfig();
+            break;
         }
     }
 
