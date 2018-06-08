@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -24,20 +25,25 @@ public class WishLogEngine {
      * 队列容量
      */
     private Integer QUEUE_SIZE = 100;
-
     /**
      * 许愿日志队列
      */
     @Getter
     private ArrayBlockingQueue<WishLog> wishLogQueue = new ArrayBlockingQueue<>(QUEUE_SIZE);
+    /**
+     * 控制引擎
+     */
+    @Resource
+    private ControlEngine controlEngine;
 
     /**
      * 记录许愿
      */
-    public void recordWish(WishAwardType type, Long amount, Stock stock) {
+    public void recordWish(WishAwardType type, Long amount, String stockCode) {
         if (wishLogQueue.remainingCapacity() == 0) {
             wishLogQueue.remove();
         }
+        Stock stock = controlEngine.getStockByCode(stockCode);
         wishLogQueue.add(new WishLog(type, amount, stock, new Date()));
     }
 }

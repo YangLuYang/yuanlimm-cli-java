@@ -5,8 +5,10 @@ import com.yu.tools.yuanlimm.enums.WishAwardType;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
@@ -19,12 +21,21 @@ import java.util.concurrent.atomic.AtomicLong;
 @Lazy(false)
 @Component
 public class StatisticEngine {
-
     /**
      * 许愿股票
      */
     @Getter
     private Map<Stock, AtomicLong> wishStock = new HashMap<>();
+    /**
+     * 未知股票
+     */
+    @Getter
+    private final Map<String, AtomicLong> unknownWishStock = new HashMap<>();
+    /**
+     * 控制引擎
+     */
+    @Resource
+    private ControlEngine controlEngine;
     /**
      * 许愿援力
      */
@@ -34,17 +45,44 @@ public class StatisticEngine {
     /**
      * 记录许愿
      */
-    public void recordWish(WishAwardType type, Long amount, Stock stock) {
+    public void recordWish(WishAwardType type, Long amount, String stockCode) {
         if (type.equals(WishAwardType.stock)) {
-            AtomicLong atomicLong = wishStock.get(stock);
-            if (atomicLong == null) {
-                atomicLong = new AtomicLong(0);
-                wishStock.put(stock, atomicLong);
-            }
+            Stock stock = controlEngine.getStockByCode(stockCode);
+            if (stock != null) {
+                AtomicLong atomicLong = wishStock.get(stock);
 
-            atomicLong.addAndGet(amount);
+                if (atomicLong == null) {
+                    atomicLong = new AtomicLong(0);
+                    wishStock.put(stock, atomicLong);
+                }
+                atomicLong.addAndGet(amount);
+            } else {
+                AtomicLong atomicLong = unknownWishStock.get(stockCode);
+
+                if (atomicLong == null) {
+                    atomicLong = new AtomicLong(0);
+                    synchronized (unknownWishStock) {
+                        unknownWishStock.put(stockCode, atomicLong);
+                    }
+                }
+                atomicLong.addAndGet(amount);
+            }
         } else if (type.equals(WishAwardType.coin)) {
             wishCoin.addAndGet(amount);
         }
+    }
+
+    /**
+     * 处理未知股票
+     */
+    @Scheduled(fixedDelay = 60 * 1000)
+    public void processUnknownWishStock() {
+        if (unknownWishStock.size() == 0) {
+            return;
+        }
+
+        controlEngine.refreshStockList();
+        unknownWishStock.forEach((key, value) -> wishStock.put(controlEngine.getStockByCode(key), value));
+        unknownWishStock.clear();
     }
 }

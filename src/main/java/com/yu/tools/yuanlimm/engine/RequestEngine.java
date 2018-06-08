@@ -102,39 +102,38 @@ public class RequestEngine {
             try {
                 requestCounter.getAndIncrement();
 
-                WishResponse wishResponse = restTemplate.postForObject("https://www.yuanlimm.com/api/super_wishs", requestEntity, WishResponse.class);
+                WishResponse response = restTemplate.postForObject("https://www.yuanlimm.com/api/super_wishs",
+                        requestEntity, WishResponse.class);
 
-                if (wishResponse.getSuccess() == null) {
-                    log.error("ERROR:\t" + wishResponse.getMsg());
+                if (response.getSuccess() == null) {
+                    log.error("ERROR:\t" + response.getMsg());
                     System.exit(0);
                 }
 
-                if (wishResponse.getHard() != null && !controlEngine.getHASH_HARD().equals(wishResponse.getHard())) {
-                    controlEngine.setHASH_HARD(wishResponse.getHard());
+                if (response.getHard() != null && !controlEngine.getHASH_HARD().equals(response.getHard())) {
+                    controlEngine.setHASH_HARD(response.getHard());
                     queue.clear();
                 }
 
-                if (wishResponse.getSuccess()) {
+                if (response.getSuccess()) {
                     requestSuccessCounter.incrementAndGet();
                     requestSuccessMinuteCounter.increment();
 
-                    statisticEngine.recordWish(wishResponse.getType(), wishResponse.getAmount(),
-                            controlEngine.getStockByCode(wishResponse.getStock()));
-                    wishLogEngine.recordWish(wishResponse.getType(), wishResponse.getAmount(),
-                            controlEngine.getStockByCode(wishResponse.getStock()));
+                    statisticEngine.recordWish(response.getType(), response.getAmount(), response.getStock());
+                    wishLogEngine.recordWish(response.getType(), response.getAmount(), response.getStock());
 
-                    switch (wishResponse.getType()) {
+                    switch (response.getType()) {
                         case coin:
-                            monitorEngine.getTotalCoin().getAndAdd(wishResponse.getAmount());
+                            monitorEngine.getTotalCoin().getAndAdd(response.getAmount());
                             break;
                         case stock:
-                            monitorEngine.getTotalStock().getAndAdd(wishResponse.getAmount());
+                            monitorEngine.getTotalStock().getAndAdd(response.getAmount());
                             break;
                         default:
                             throw new IllegalArgumentException();
                     }
                 } else {
-                    log.warn("RequestFail:\t" + wishResponse);
+                    log.warn("RequestFail:\t" + response);
                 }
             } catch (HttpClientErrorException e) {
                 if (e.getMessage().contains("429")) {

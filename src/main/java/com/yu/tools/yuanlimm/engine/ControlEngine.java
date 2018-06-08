@@ -109,7 +109,7 @@ public class ControlEngine {
      * Init
      */
     public void init() {
-        this.getStockList().forEach(stock -> stockMap.put(stock.getCode(), stock));
+        this.refreshStockList();
 
         Optional.ofNullable(this.getHashHard()).ifPresent(number -> this.HASH_HARD = number);
 
@@ -257,14 +257,23 @@ public class ControlEngine {
     }
 
     /**
+     * 刷新股票列表
+     */
+    public void refreshStockList() {
+        StocksResponse response = restTemplate.getForObject("https://www.yuanlimm.com/api/stocks", StocksResponse.class);
+        this.stockList = response.getData();
+
+        this.stockList.forEach(stock -> stockMap.put(stock.getCode(), stock));
+    }
+
+    /**
      * 获取股票列表
      *
      * @return 股票列表
      */
     public List<Stock> getStockList() {
         if (Objects.isNull(this.stockList)) {
-            StocksResponse response = restTemplate.getForObject("https://www.yuanlimm.com/api/stocks", StocksResponse.class);
-            this.stockList = response.getData();
+            this.refreshStockList();
         }
         return this.stockList;
     }
