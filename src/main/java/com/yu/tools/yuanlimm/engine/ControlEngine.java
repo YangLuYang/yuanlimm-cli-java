@@ -238,7 +238,7 @@ public class ControlEngine {
     /**
      * 每30秒重置难度
      */
-    @Scheduled(fixedDelay = 1000 * 30)
+    @Scheduled(fixedDelay = 1000 * 20)
     public void updateHashHard() {
         Optional.ofNullable(this.getHashHard()).ifPresent(number -> this.HASH_HARD = number);
     }
