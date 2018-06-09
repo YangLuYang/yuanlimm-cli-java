@@ -2,9 +2,11 @@ package com.yu.tools.yuanlimm.engine;
 
 import com.yu.tools.yuanlimm.dto.WishRequest;
 import com.yu.tools.yuanlimm.dto.WishResponse;
+import com.yu.tools.yuanlimm.event.WishSuccessEvent;
 import com.yu.tools.yuanlimm.util.MinuteCounter;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -81,6 +83,11 @@ public class RequestEngine {
      */
     @Getter
     private LinkedBlockingQueue<WishRequest> queue = new LinkedBlockingQueue<>(QUEUE_SIZE);
+    /**
+     * ApplicationContext
+     */
+    @Resource
+    private ApplicationContext applicationContext;
 
     /**
      * 请求任务
@@ -119,8 +126,7 @@ public class RequestEngine {
                     requestSuccessCounter.incrementAndGet();
                     requestSuccessMinuteCounter.increment();
 
-                    statisticEngine.recordWish(response.getType(), response.getAmount(), response.getStock());
-                    wishLogEngine.recordWish(response.getType(), response.getAmount(), response.getStock());
+                    applicationContext.publishEvent(new WishSuccessEvent(this, response));
 
                     switch (response.getType()) {
                         case coin:

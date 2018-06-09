@@ -6,30 +6,34 @@ import com.yu.tools.yuanlimm.model.WishLog;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.*;
 
 /**
  * Engine - 许愿日志
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "FieldCanBeLocal"})
 @Slf4j
 @Lazy(false)
 @Component
 public class WishLogEngine {
-
+    /**
+     * 未知股票
+     */
+    @Getter
+    private final Map<String, WishLog> unknownWishStock = new HashMap<>();
     /**
      * 队列容量
      */
-    private Integer QUEUE_SIZE = 100;
+    private Integer QUEUE_SIZE = 200;
     /**
      * 许愿日志队列
      */
     @Getter
-    private ArrayBlockingQueue<WishLog> wishLogQueue = new ArrayBlockingQueue<>(QUEUE_SIZE);
+    private ArrayList<WishLog> wishLogList = new ArrayList<>();
     /**
      * 控制引擎
      */
@@ -39,11 +43,39 @@ public class WishLogEngine {
     /**
      * 记录许愿
      */
-    public void recordWish(WishAwardType type, Long amount, String stockCode) {
-        if (wishLogQueue.remainingCapacity() == 0) {
-            wishLogQueue.remove();
+    public void record(WishAwardType type, Long amount, String stockCode) {
+        if (wishLogList.size() >= QUEUE_SIZE) {
+            wishLogList.remove(0);
         }
         Stock stock = controlEngine.getStockByCode(stockCode);
-        wishLogQueue.add(new WishLog(type, amount, stock, new Date()));
+        if (stock != null) {
+            wishLogList.add(new WishLog(type, amount, stock, new Date()));
+        } else {
+            synchronized (unknownWishStock) {
+                unknownWishStock.put(stockCode, new WishLog(type, amount, null, new Date()));
+            }
+        }
+    }
+
+    /**
+     * 处理未知股票
+     */
+    @Scheduled(cron = "0/20 * * * * *")
+    public void processUnknownWishStock() {
+        if (unknownWishStock.size() == 0) {
+            return;
+        }
+
+        synchronized (unknownWishStock) {
+            controlEngine.refreshStockList();
+            unknownWishStock.forEach((key, value) -> {
+                Stock stock = controlEngine.getStockByCode(key);
+                wishLogList.add(new WishLog(value.getType(), value.getAmount(), stock, new Date()));
+            });
+
+            wishLogList.sort(Comparator.comparing(WishLog::getDate));
+
+            unknownWishStock.clear();
+        }
     }
 }

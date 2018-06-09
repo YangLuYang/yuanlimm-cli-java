@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.concurrent.ArrayBlockingQueue;
 
 /**
  * RestController - Stock
@@ -23,7 +22,7 @@ public class WishLogController {
 
     @GetMapping(path = "/v1/wishLog/list")
     public Message getWishLogList() {
-        ArrayBlockingQueue<WishLog> wishLogQueue = wishLogEngine.getWishLogQueue();
-        return Message.result(new ArrayList<>(wishLogQueue));
+        ArrayList<WishLog> wishLogList = wishLogEngine.getWishLogList();
+        return Message.result(wishLogList);
     }
 }

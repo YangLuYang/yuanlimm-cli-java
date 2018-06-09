@@ -22,15 +22,15 @@ import java.util.concurrent.atomic.AtomicLong;
 @Component
 public class StatisticEngine {
     /**
-     * 许愿股票
-     */
-    @Getter
-    private Map<Stock, AtomicLong> wishStock = new HashMap<>();
-    /**
      * 未知股票
      */
     @Getter
     private final Map<String, AtomicLong> unknownWishStock = new HashMap<>();
+    /**
+     * 许愿股票
+     */
+    @Getter
+    private Map<Stock, AtomicLong> wishStock = new HashMap<>();
     /**
      * 控制引擎
      */
@@ -45,7 +45,7 @@ public class StatisticEngine {
     /**
      * 记录许愿
      */
-    public void recordWish(WishAwardType type, Long amount, String stockCode) {
+    public void record(WishAwardType type, Long amount, String stockCode) {
         if (type.equals(WishAwardType.stock)) {
             Stock stock = controlEngine.getStockByCode(stockCode);
             if (stock != null) {
@@ -75,14 +75,16 @@ public class StatisticEngine {
     /**
      * 处理未知股票
      */
-    @Scheduled(fixedDelay = 60 * 1000)
+    @Scheduled(cron = "10/20 * * * * *")
     public void processUnknownWishStock() {
         if (unknownWishStock.size() == 0) {
             return;
         }
 
-        controlEngine.refreshStockList();
-        unknownWishStock.forEach((key, value) -> wishStock.put(controlEngine.getStockByCode(key), value));
-        unknownWishStock.clear();
+        synchronized (unknownWishStock) {
+            controlEngine.refreshStockList();
+            unknownWishStock.forEach((key, value) -> wishStock.put(controlEngine.getStockByCode(key), value));
+            unknownWishStock.clear();
+        }
     }
 }
