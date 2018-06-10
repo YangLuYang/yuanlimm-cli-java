@@ -40,6 +40,7 @@ function updateSystemStatus() {
             $("#btn_run").hide(250);
 
             if (updateMonitorInfoTask == null) {
+                updateMonitorInfo();
                 updateMonitorInfoTask = setInterval(function () {
                     updateMonitorInfo();
                 }, 1000);

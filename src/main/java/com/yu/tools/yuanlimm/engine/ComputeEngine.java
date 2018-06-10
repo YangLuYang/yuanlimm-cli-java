@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
@@ -90,7 +91,7 @@ public class ComputeEngine {
     public void start() {
         this.stockCodeBytes = controlEngine.getSTOCK_CODE().getBytes();
         this.walletAddressBytes = controlEngine.getWALLET_ADDRESS().getBytes();
-        this.cheerWordBytes = controlEngine.getCHEER_WORD().getBytes();
+        this.cheerWordBytes = controlEngine.getCHEER_WORD().getBytes(Charset.forName("utf-8"));
 
         for (int i = 0; i < controlEngine.getCOMPUTE_THREAD(); i++) {
             Thread thread = new Thread(task);
