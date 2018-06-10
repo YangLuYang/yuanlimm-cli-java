@@ -16,6 +16,21 @@ function getStatisticInfo() {
 }
 
 function initChart() {
+    var dataCount = 0;
+    ajaxGet("/api/v1/statistic", function (result) {
+        if (result.wishStockInfoList) {
+            dataCount = result.wishStockInfoList.length();
+        }
+    }, false);
+
+    var end = 100;
+    if (dataCount > 0) {
+        end = Math.ceil(100 / (data.length / 20));
+        if (end > 100) {
+            end = 100;
+        }
+    }
+
     statisticChart = echarts.init(document.getElementById('main'));
     var option = {
         "tooltip": {
@@ -74,7 +89,7 @@ function initChart() {
             ],
             bottom: 30,
             start: 0,
-            end: 100,
+            end: end,
             handleSize: '110%',
             handleStyle: {
                 color: "#d3dee5"
@@ -121,31 +136,9 @@ function updateChartData(data) {
         xData = xData.reverse();
         yData = yData.reverse();
 
-        var end = 100 / Math.ceil(data.length / 15);
-
         statisticChart.setOption({
             xAxis: {data: xData},
-            series: [{data: yData}],
-            dataZoom: [{
-                show: true,
-                height: 30,
-                xAxisIndex: [
-                    0
-                ],
-                bottom: 30,
-                start: 0,
-                end: end,
-                handleSize: '110%',
-                handleStyle: {
-                    color: "#d3dee5"
-                },
-                textStyle: {
-                    color: "#90979c"
-                },
-                borderColor: "#90979c",
-                zoomOnMouseWheel: false,
-                moveOnMouseMove: true
-            }]
+            series: [{data: yData}]
         });
     } else {
         $("#div_stock_chart").hide(250);
