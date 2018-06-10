@@ -25,7 +25,7 @@ function initChart() {
 
     var end = 100;
     if (dataCount > 0) {
-        end = Math.ceil(100 / (data.length / 20));
+        end = Math.ceil(100 / (dataCount / 20));
         if (end > 100) {
             end = 100;
         }
