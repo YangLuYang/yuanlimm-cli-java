@@ -15,5 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 public class StatisticInfoResponse implements Serializable {
     private List<WishStockInfo> wishStockInfoList;
-    private Long coinAmount;
+    private Long totalCoin;
+    private Long totalStock;
 }

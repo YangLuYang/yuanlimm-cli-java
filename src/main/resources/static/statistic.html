@@ -1,5 +1,5 @@
-<!DOCTYPE html>
 <html>
+<!DOCTYPE html>
 
 <head>
     <meta charset="utf-8">
@@ -29,13 +29,28 @@
     </div>
 </div>
 <div class="page projets-page">
-    <section class="portfolio-block">
-        <div class="container">
-            <div class="heading">
-                <h2>Wish Statistic</h2>
+    <section class="portfolio-block skills">
+        <div class="heading" style="margin-bottom: 10px">
+            <h2>Wish Statistic</h2>
+        </div>
+        <div class="row" id="div_stock_chart">
+            <div id="main" style="width: 100%;height:450px;"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-2">
+                <div class="project-card-no-image" style="text-align:center">
+                    <h3>总援力</h3>
+                    <h4 id="div_total_coin">N/A</h4>
+                </div>
             </div>
-            <div class="row" id="div_statistic_list">
+            <div class="col-md-2">
+                <div class="project-card-no-image" style="text-align:center">
+                    <h3>总股份</h3>
+                    <h4 id="div_total_stock">125287</h4>
+                </div>
             </div>
+            <div class="col-md-4"></div>
         </div>
     </section>
 </div>
@@ -44,6 +59,7 @@
 <script src="./assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="./assets/js/theme.js"></script>
 <script src="./assets/pnotify/pnotify.js"></script>
+<script src="./assets/echarts/echarts.min.js"></script>
 <script src="./js/common.js"></script>
 <script src="./js/statistic.js"></script>
 </html>

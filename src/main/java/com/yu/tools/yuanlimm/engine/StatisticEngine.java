@@ -40,7 +40,12 @@ public class StatisticEngine {
      * 许愿援力
      */
     @Getter
-    private AtomicLong wishCoin = new AtomicLong();
+    private AtomicLong wishCoinAmount = new AtomicLong();
+    /**
+     * 许愿股票
+     */
+    @Getter
+    private AtomicLong wishStockAmount = new AtomicLong();
 
     /**
      * 记录许愿
@@ -67,8 +72,9 @@ public class StatisticEngine {
                 }
                 atomicLong.addAndGet(amount);
             }
+            wishStockAmount.addAndGet(amount);
         } else if (type.equals(WishAwardType.coin)) {
-            wishCoin.addAndGet(amount);
+            wishCoinAmount.addAndGet(amount);
         }
     }
 

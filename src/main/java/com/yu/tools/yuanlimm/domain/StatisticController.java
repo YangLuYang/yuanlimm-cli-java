@@ -28,7 +28,8 @@ public class StatisticController {
 
     @GetMapping(path = "/v1/statistic")
     public Message getStatisticInfo() {
-        AtomicLong wishCoin = statisticEngine.getWishCoin();
+        AtomicLong wishCoinAmount = statisticEngine.getWishCoinAmount();
+        AtomicLong wishStockAmount = statisticEngine.getWishStockAmount();
         Map<Stock, AtomicLong> wishStock = statisticEngine.getWishStock();
 
         List<WishStockInfo> stockInfoList = wishStock.entrySet().stream()
@@ -36,6 +37,6 @@ public class StatisticController {
                 .map(entry -> new WishStockInfo(entry.getKey(), entry.getValue().get()))
                 .collect(Collectors.toList());
 
-        return Message.result(new StatisticInfoResponse(stockInfoList, wishCoin.get()));
+        return Message.result(new StatisticInfoResponse(stockInfoList, wishCoinAmount.get(), wishStockAmount.get()));
     }
 }

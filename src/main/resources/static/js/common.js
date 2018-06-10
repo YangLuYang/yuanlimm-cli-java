@@ -14,6 +14,8 @@ function ajaxGet(url, fn, async) {
         success: function (result) {
             if (result.status === "success") {
                 fn(result);
+            } else if (result.status === "noData") {
+                fn(result)
             } else {
                 showNotify(result.message, "error");
             }
@@ -33,25 +35,28 @@ function ajaxGet(url, fn, async) {
  */
 function ajaxPost(url, data, fn, async) {
     $.ajax({
-        url: url,
-        type: 'post',
-        timeout: 30000,
-        async: async ? async : async !== false,
-        contentType: 'application/json',
-        data: data ? JSON.stringify(data) : null,
-        beforeSend: function (xhr) {
-        },
-        success: function (result) {
-            if (result.status === "success") {
-                fn(result);
-            } else {
-                showNotify(result.message, "error");
+            url: url,
+            type: 'post',
+            timeout: 30000,
+            async: async ? async : async !== false,
+            contentType: 'application/json',
+            data: data ? JSON.stringify(data) : null,
+            beforeSend: function (xhr) {
+            },
+            success: function (result) {
+                if (result.status === "success") {
+                    fn(result);
+                } else if (result.status === "noData") {
+                    fn(result)
+                } else {
+                    showNotify(result.message, "error");
+                }
+            },
+            error: function () {
+                console.log("Request Fail:\t" + url);
             }
-        },
-        error: function () {
-            console.log("Request Fail:\t" + url);
         }
-    });
+    );
 }
 
 /**
@@ -75,6 +80,8 @@ function ajaxDelete(url, data, fn, async) {
         success: function (result) {
             if (result.status === "success") {
                 fn(result);
+            } else if (result.status === "noData") {
+                fn(result)
             } else {
                 showNotify(result.message, "error");
             }
@@ -104,6 +111,8 @@ function ajaxPut(url, data, fn, async) {
         success: function (result) {
             if (result.status === "success") {
                 fn(result);
+            } else if (result.status === "noData") {
+                fn(result)
             } else {
                 showNotify(result.message, "error");
             }
@@ -133,6 +142,8 @@ function ajaxPatch(url, data, fn, async) {
         success: function (result) {
             if (result.status === "success") {
                 fn(result);
+            } else if (result.status === "noData") {
+                fn(result)
             } else {
                 showNotify(result.message, "error");
             }
