@@ -2,8 +2,12 @@
 animate
 brighttheme
 buttons
+callbacks
+confirm
 desktop
+history
 mobile
+nonblock
 */
 /*
 PNotify 3.2.0 sciactive.com/pnotify/
@@ -885,7 +889,7 @@ license Apache-2.0
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as a module.
-        define('pnotify.animate', ['jquery', 'static/assets/pnotify/pnotify'], factory);
+        define('pnotify.animate', ['jquery', 'pnotify'], factory);
     } else if (typeof exports === 'object' && typeof module !== 'undefined') {
         // CommonJS
         module.exports = factory(require('jquery'), require('./pnotify'));
@@ -996,7 +1000,7 @@ license Apache-2.0
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as a module.
-        define('pnotify.buttons', ['jquery', 'static/assets/pnotify/pnotify'], factory);
+        define('pnotify.buttons', ['jquery', 'pnotify'], factory);
     } else if (typeof exports === 'object' && typeof module !== 'undefined') {
         // CommonJS
         module.exports = factory(require('jquery'), require('./pnotify'));
@@ -1157,11 +1161,226 @@ license Apache-2.0
     return PNotify;
 }));
 
+// Callbacks
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as a module.
+        define('pnotify.callbacks', ['jquery', 'pnotify'], factory);
+    } else if (typeof exports === 'object' && typeof module !== 'undefined') {
+        // CommonJS
+        module.exports = factory(require('jquery'), require('./pnotify'));
+    } else {
+        // Browser globals
+        factory(root.jQuery, root.PNotify);
+    }
+}(typeof window !== "undefined" ? window : this, function ($, PNotify) {
+    var _init = PNotify.prototype.init,
+        _open = PNotify.prototype.open,
+        _remove = PNotify.prototype.remove;
+    PNotify.prototype.init = function () {
+        if (this.options.before_init) {
+            this.options.before_init(this.options);
+        }
+        _init.apply(this, arguments);
+        if (this.options.after_init) {
+            this.options.after_init(this);
+        }
+    };
+    PNotify.prototype.open = function () {
+        var ret;
+        if (this.options.before_open) {
+            ret = this.options.before_open(this);
+        }
+        if (ret !== false) {
+            _open.apply(this, arguments);
+            if (this.options.after_open) {
+                this.options.after_open(this);
+            }
+        }
+    };
+    PNotify.prototype.remove = function (timer_hide) {
+        var ret;
+        if (this.options.before_close) {
+            ret = this.options.before_close(this, timer_hide);
+        }
+        if (ret !== false) {
+            _remove.apply(this, arguments);
+            if (this.options.after_close) {
+                this.options.after_close(this, timer_hide);
+            }
+        }
+    };
+    return PNotify;
+}));
+
+// Confirm
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as a module.
+        define('pnotify.confirm', ['jquery', 'pnotify'], factory);
+    } else if (typeof exports === 'object' && typeof module !== 'undefined') {
+        // CommonJS
+        module.exports = factory(require('jquery'), require('./pnotify'));
+    } else {
+        // Browser globals
+        factory(root.jQuery, root.PNotify);
+    }
+}(typeof window !== "undefined" ? window : this, function ($, PNotify) {
+    PNotify.prototype.options.confirm = {
+        // Make a confirmation box.
+        confirm: false,
+        // Make a prompt.
+        prompt: false,
+        // Classes to add to the input element of the prompt.
+        prompt_class: "",
+        // The default value of the prompt.
+        prompt_default: "",
+        // Whether the prompt should accept multiple lines of text.
+        prompt_multi_line: false,
+        // Where to align the buttons. (right, center, left, justify)
+        align: "right",
+        // The buttons to display, and their callbacks.
+        buttons: [
+            {
+                text: "Ok",
+                addClass: "",
+                // Whether to trigger this button when the user hits enter in a single line prompt.
+                promptTrigger: true,
+                click: function (notice, value) {
+                    notice.remove();
+                    notice.get().trigger("pnotify.confirm", [notice, value]);
+                }
+            },
+            {
+                text: "Cancel",
+                addClass: "",
+                click: function (notice) {
+                    notice.remove();
+                    notice.get().trigger("pnotify.cancel", notice);
+                }
+            }
+        ]
+    };
+    PNotify.prototype.modules.confirm = {
+        init: function (notice, options) {
+            // The div that contains the buttons.
+            this.container = $('<div class="ui-pnotify-action-bar" style="margin-top:5px;clear:both;" />').css('text-align', options.align).appendTo(notice.container);
+
+            if (options.confirm || options.prompt)
+                this.makeDialog(notice, options);
+            else
+                this.container.hide();
+        },
+
+        update: function (notice, options) {
+            if (options.confirm) {
+                this.makeDialog(notice, options);
+                this.container.show();
+            } else {
+                this.container.hide().empty();
+            }
+        },
+
+        afterOpen: function (notice, options) {
+            if (options.prompt) {
+                this.prompt.focus();
+            }
+        },
+
+        makeDialog: function (notice, options) {
+            var already = false, that = this, btn, elem;
+            this.container.empty();
+            if (options.prompt) {
+                // The input element of a prompt.
+                this.prompt = $('<' + (options.prompt_multi_line ? 'textarea rows="5"' : 'input type="text"') + ' style="margin-bottom:5px;clear:both;" />')
+                    .addClass((typeof notice.styles.input === "undefined" ? "" : notice.styles.input) + " " + (typeof options.prompt_class === "undefined" ? "" : options.prompt_class))
+                    .val(options.prompt_default)
+                    .appendTo(this.container);
+            }
+            var customButtons = (options.buttons[0] && options.buttons[0] !== PNotify.prototype.options.confirm.buttons[0]);
+            for (var i = 0; i < options.buttons.length; i++) {
+                if (options.buttons[i] === null || (customButtons && PNotify.prototype.options.confirm.buttons[i] && PNotify.prototype.options.confirm.buttons[i] === options.buttons[i])) {
+                    continue;
+                }
+                btn = options.buttons[i];
+                if (already) {
+                    this.container.append(' ');
+                } else {
+                    already = true;
+                }
+                elem = $('<button type="button" class="ui-pnotify-action-button" />')
+                    .addClass((typeof notice.styles.btn === "undefined" ? "" : notice.styles.btn) + " " + (typeof btn.addClass === "undefined" ? "" : btn.addClass))
+                    .text(btn.text)
+                    .appendTo(this.container)
+                    .on("click", (function (btn) {
+                        return function () {
+                            if (typeof btn.click == "function") {
+                                btn.click(notice, options.prompt ? that.prompt.val() : null);
+                            }
+                        }
+                    })(btn));
+                if (options.prompt && !options.prompt_multi_line && btn.promptTrigger)
+                    this.prompt.keypress((function (elem) {
+                        return function (e) {
+                            if (e.keyCode == 13)
+                                elem.click();
+                        }
+                    })(elem));
+                if (notice.styles.text) {
+                    elem.wrapInner('<span class="' + notice.styles.text + '"></span>');
+                }
+                if (notice.styles.btnhover) {
+                    elem.hover((function (elem) {
+                        return function () {
+                            elem.addClass(notice.styles.btnhover);
+                        }
+                    })(elem), (function (elem) {
+                        return function () {
+                            elem.removeClass(notice.styles.btnhover);
+                        }
+                    })(elem));
+                }
+                if (notice.styles.btnactive) {
+                    elem.on("mousedown", (function (elem) {
+                        return function () {
+                            elem.addClass(notice.styles.btnactive);
+                        }
+                    })(elem)).on("mouseup", (function (elem) {
+                        return function () {
+                            elem.removeClass(notice.styles.btnactive);
+                        }
+                    })(elem));
+                }
+                if (notice.styles.btnfocus) {
+                    elem.on("focus", (function (elem) {
+                        return function () {
+                            elem.addClass(notice.styles.btnfocus);
+                        }
+                    })(elem)).on("blur", (function (elem) {
+                        return function () {
+                            elem.removeClass(notice.styles.btnfocus);
+                        }
+                    })(elem));
+                }
+            }
+        }
+    };
+    $.extend(PNotify.styling.bootstrap3, {
+        btn: "btn btn-default",
+        input: "form-control"
+    });
+    $.extend(PNotify.styling.fontawesome, {
+        btn: "btn btn-default",
+        input: "form-control"
+    });
+    return PNotify;
+}));
+
 // Desktop
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as a module.
-        define('pnotify.desktop', ['jquery', 'static/assets/pnotify/pnotify'], factory);
+        define('pnotify.desktop', ['jquery', 'pnotify'], factory);
     } else if (typeof exports === 'object' && typeof module !== 'undefined') {
         // CommonJS
         module.exports = factory(require('jquery'), require('./pnotify'));
@@ -1315,11 +1534,197 @@ license Apache-2.0
     return PNotify;
 }));
 
+// History
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as a module.
+        define('pnotify.history', ['jquery', 'pnotify'], factory);
+    } else if (typeof exports === 'object' && typeof module !== 'undefined') {
+        // CommonJS
+        module.exports = factory(require('jquery'), require('./pnotify'));
+    } else {
+        // Browser globals
+        factory(root.jQuery, root.PNotify);
+    }
+}(typeof window !== "undefined" ? window : this, function ($, PNotify) {
+    var history_menu,
+        history_handle_top;
+    $(function () {
+        $("body").on("pnotify.history-all", function () {
+            // Display all notices. (Disregarding non-history notices.)
+            $.each(PNotify.notices, function () {
+                if (this.modules.history.inHistory) {
+                    if (this.elem.is(":visible")) {
+                        // The hide variable controls whether the history pull down should
+                        // queue a removal timer.
+                        if (this.options.hide)
+                            this.queueRemove();
+                    } else if (this.open)
+                        this.open();
+                }
+            });
+        }).on("pnotify.history-last", function () {
+            var pushTop = (PNotify.prototype.options.stack.push === "top");
+
+            // Look up the last history notice, and display it.
+            var i = (pushTop ? 0 : -1);
+
+            var notice;
+            do {
+                if (i === -1)
+                    notice = PNotify.notices.slice(i);
+                else
+                    notice = PNotify.notices.slice(i, i + 1);
+                if (!notice[0])
+                    return false;
+
+                i = (pushTop ? i + 1 : i - 1);
+            } while (!notice[0].modules.history.inHistory || notice[0].elem.is(":visible"));
+            if (notice[0].open)
+                notice[0].open();
+        });
+    });
+    PNotify.prototype.options.history = {
+        // Place the notice in the history.
+        history: true,
+        // Display a pull down menu to redisplay previous notices.
+        menu: false,
+        // Make the pull down menu fixed to the top of the viewport.
+        fixed: true,
+        // Maximum number of notifications to have onscreen.
+        maxonscreen: Infinity,
+        // The various displayed text, helps facilitating internationalization.
+        labels: {
+            redisplay: "Redisplay",
+            all: "All",
+            last: "Last"
+        }
+    };
+    PNotify.prototype.modules.history = {
+        init: function (notice, options) {
+            // Make sure that no notices get destroyed.
+            notice.options.destroy = false;
+
+            // The history variable controls whether the notice gets redisplayed
+            // by the history pull down.
+            this.inHistory = options.history;
+
+            if (options.menu) {
+                // If there isn't a history pull down, create one.
+                if (typeof history_menu === "undefined") {
+                    history_menu = $("<div />", {
+                        "class": "ui-pnotify-history-container " + notice.styles.hi_menu,
+                        "mouseleave": function () {
+                            history_menu.css("top", "-" + history_handle_top + "px");
+                        }
+                    })
+                        .append($("<div />", {"class": "ui-pnotify-history-header", "text": options.labels.redisplay}))
+                        .append($("<button />", {
+                            "class": "ui-pnotify-history-all " + notice.styles.hi_btn,
+                            "text": options.labels.all,
+                            "mouseenter": function () {
+                                $(this).addClass(notice.styles.hi_btnhov);
+                            },
+                            "mouseleave": function () {
+                                $(this).removeClass(notice.styles.hi_btnhov);
+                            },
+                            "click": function () {
+                                $(this).trigger("pnotify.history-all");
+                                return false;
+                            }
+                        }))
+                        .append($("<button />", {
+                            "class": "ui-pnotify-history-last " + notice.styles.hi_btn,
+                            "text": options.labels.last,
+                            "mouseenter": function () {
+                                $(this).addClass(notice.styles.hi_btnhov);
+                            },
+                            "mouseleave": function () {
+                                $(this).removeClass(notice.styles.hi_btnhov);
+                            },
+                            "click": function () {
+                                $(this).trigger("pnotify.history-last");
+                                return false;
+                            }
+                        }))
+                        .appendTo("body");
+
+                    // Make a handle so the user can pull down the history tab.
+                    var handle = $("<span />", {
+                        "class": "ui-pnotify-history-pulldown " + notice.styles.hi_hnd,
+                        "mouseenter": function () {
+                            history_menu.css("top", "0");
+                        }
+                    })
+                        .appendTo(history_menu);
+
+                    // Get the top of the handle.
+                    history_handle_top = handle.offset().top + 2;
+                    // Hide the history pull down up to the top of the handle.
+                    history_menu.css("top", "-" + history_handle_top + "px");
+
+                    // Apply the fixed styling.
+                    if (options.fixed) {
+                        history_menu.addClass('ui-pnotify-history-fixed');
+                    }
+                }
+            }
+        },
+        update: function (notice, options) {
+            // Update values for history menu access.
+            this.inHistory = options.history;
+            if (options.fixed && history_menu) {
+                history_menu.addClass('ui-pnotify-history-fixed');
+            } else if (history_menu) {
+                history_menu.removeClass('ui-pnotify-history-fixed');
+            }
+        },
+        beforeOpen: function (notice, options) {
+            // Remove oldest notifications leaving only options.maxonscreen on screen
+            if (PNotify.notices && (PNotify.notices.length > options.maxonscreen)) {
+                // Oldest are normally in front of array, or if stack.push=="top" then
+                // they are at the end of the array! (issue #98)
+                var el;
+                if (notice.options.stack.push !== "top") {
+                    el = PNotify.notices.slice(0, PNotify.notices.length - options.maxonscreen);
+                } else {
+                    el = PNotify.notices.slice(options.maxonscreen, PNotify.notices.length);
+                }
+
+                $.each(el, function () {
+                    if (this.remove) {
+                        this.remove();
+                    }
+                });
+            }
+        }
+    };
+    $.extend(PNotify.styling.brighttheme, {
+        hi_menu: "ui-pnotify-history-brighttheme",
+        hi_btn: "",
+        hi_btnhov: "",
+        hi_hnd: ""
+    });
+    $.extend(PNotify.styling.bootstrap3, {
+        hi_menu: "well",
+        hi_btn: "btn btn-default",
+        hi_btnhov: "",
+        hi_hnd: "glyphicon glyphicon-chevron-down"
+    });
+    $.extend(PNotify.styling.fontawesome, {
+        hi_menu: "well",
+        hi_btn: "btn btn-default",
+        hi_btnhov: "",
+        hi_hnd: "fa fa-chevron-down"
+    });
+    return PNotify;
+}));
+
 // Mobile
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as a module.
-        define('pnotify.mobile', ['jquery', 'static/assets/pnotify/pnotify'], factory);
+        define('pnotify.mobile', ['jquery', 'pnotify'], factory);
     } else if (typeof exports === 'object' && typeof module !== 'undefined') {
         // CommonJS
         module.exports = factory(require('jquery'), require('./pnotify'));
@@ -1431,6 +1836,164 @@ license Apache-2.0
                     delete notice.options.stack.mobileOrigSpacing2;
                 }
             }
+        }
+    };
+    return PNotify;
+}));
+
+// Nonblock
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as a module.
+        define('pnotify.nonblock', ['jquery', 'pnotify'], factory);
+    } else if (typeof exports === 'object' && typeof module !== 'undefined') {
+        // CommonJS
+        module.exports = factory(require('jquery'), require('./pnotify'));
+    } else {
+        // Browser globals
+        factory(root.jQuery, root.PNotify);
+    }
+}(typeof window !== "undefined" ? window : this, function ($, PNotify) {
+    // Some useful regexes.
+    var re_on = /^on/,
+        re_mouse_events = /^(dbl)?click$|^mouse(move|down|up|over|out|enter|leave)$|^contextmenu$/,
+        re_ui_events = /^(focus|blur|select|change|reset)$|^key(press|down|up)$/,
+        re_html_events = /^(scroll|resize|(un)?load|abort|error)$/;
+    // Fire a DOM event.
+    var dom_event = function (e, orig_e) {
+        var event_object;
+        e = e.toLowerCase();
+        if (document.createEvent && this.dispatchEvent) {
+            // FireFox, Opera, Safari, Chrome
+            e = e.replace(re_on, '');
+            if (e.match(re_mouse_events)) {
+                // This allows the click event to fire on the notice. There is
+                // probably a much better way to do it.
+                $(this).offset();
+                event_object = document.createEvent("MouseEvents");
+                event_object.initMouseEvent(
+                    e, orig_e.bubbles, orig_e.cancelable, orig_e.view, orig_e.detail,
+                    orig_e.screenX, orig_e.screenY, orig_e.clientX, orig_e.clientY,
+                    orig_e.ctrlKey, orig_e.altKey, orig_e.shiftKey, orig_e.metaKey, orig_e.button, orig_e.relatedTarget
+                );
+            } else if (e.match(re_ui_events)) {
+                event_object = document.createEvent("UIEvents");
+                event_object.initUIEvent(e, orig_e.bubbles, orig_e.cancelable, orig_e.view, orig_e.detail);
+            } else if (e.match(re_html_events)) {
+                event_object = document.createEvent("HTMLEvents");
+                event_object.initEvent(e, orig_e.bubbles, orig_e.cancelable);
+            }
+            if (!event_object) return;
+            this.dispatchEvent(event_object);
+        } else {
+            // Internet Explorer
+            if (!e.match(re_on)) e = "on" + e;
+            event_object = document.createEventObject(orig_e);
+            this.fireEvent(e, event_object);
+        }
+    };
+
+
+    // This keeps track of the last element the mouse was over, so
+    // mouseleave, mouseenter, etc can be called.
+    var nonblock_last_elem;
+    // This is used to pass events through the notice if it is non-blocking.
+    var nonblock_pass = function (notice, e, e_name) {
+        notice.elem.addClass("ui-pnotify-nonblock-hide");
+        var element_below = document.elementFromPoint(e.clientX, e.clientY);
+        notice.elem.removeClass("ui-pnotify-nonblock-hide");
+        var jelement_below = $(element_below);
+        var cursor_style = jelement_below.css("cursor");
+        if (cursor_style === "auto" && element_below.tagName === "A") {
+            cursor_style = "pointer";
+        }
+        notice.elem.css("cursor", cursor_style !== "auto" ? cursor_style : "default");
+        // If the element changed, call mouseenter, mouseleave, etc.
+        if (!nonblock_last_elem || nonblock_last_elem.get(0) != element_below) {
+            if (nonblock_last_elem) {
+                dom_event.call(nonblock_last_elem.get(0), "mouseleave", e.originalEvent);
+                dom_event.call(nonblock_last_elem.get(0), "mouseout", e.originalEvent);
+            }
+            dom_event.call(element_below, "mouseenter", e.originalEvent);
+            dom_event.call(element_below, "mouseover", e.originalEvent);
+        }
+        dom_event.call(element_below, e_name, e.originalEvent);
+        // Remember the latest element the mouse was over.
+        nonblock_last_elem = jelement_below;
+    };
+
+
+    PNotify.prototype.options.nonblock = {
+        // Create a non-blocking notice. It lets the user click elements underneath it.
+        nonblock: false
+    };
+    PNotify.prototype.modules.nonblock = {
+        init: function (notice, options) {
+            var that = this;
+            notice.elem.on({
+                "mouseenter": function (e) {
+                    if (that.options.nonblock) {
+                        e.stopPropagation();
+                    }
+                    if (that.options.nonblock) {
+                        // If it's non-blocking, animate to the other opacity.
+                        notice.elem.addClass("ui-pnotify-nonblock-fade");
+                    }
+                },
+                "mouseleave": function (e) {
+                    if (that.options.nonblock) {
+                        e.stopPropagation();
+                    }
+                    nonblock_last_elem = null;
+                    notice.elem.css("cursor", "auto");
+                    // Animate back to the normal opacity.
+                    if (that.options.nonblock && notice.animating !== "out") {
+                        notice.elem.removeClass("ui-pnotify-nonblock-fade");
+                    }
+                },
+                "mouseover": function (e) {
+                    if (that.options.nonblock) {
+                        e.stopPropagation();
+                    }
+                },
+                "mouseout": function (e) {
+                    if (that.options.nonblock) {
+                        e.stopPropagation();
+                    }
+                },
+                "mousemove": function (e) {
+                    if (that.options.nonblock) {
+                        e.stopPropagation();
+                        nonblock_pass(notice, e, "onmousemove");
+                    }
+                },
+                "mousedown": function (e) {
+                    if (that.options.nonblock) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        nonblock_pass(notice, e, "onmousedown");
+                    }
+                },
+                "mouseup": function (e) {
+                    if (that.options.nonblock) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        nonblock_pass(notice, e, "onmouseup");
+                    }
+                },
+                "click": function (e) {
+                    if (that.options.nonblock) {
+                        e.stopPropagation();
+                        nonblock_pass(notice, e, "onclick");
+                    }
+                },
+                "dblclick": function (e) {
+                    if (that.options.nonblock) {
+                        e.stopPropagation();
+                        nonblock_pass(notice, e, "ondblclick");
+                    }
+                }
+            });
         }
     };
     return PNotify;

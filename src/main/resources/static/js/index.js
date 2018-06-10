@@ -61,11 +61,13 @@ function updateSystemStatus() {
 function runSystem() {
     ajaxPut("/api/v1/system/service/start", null, function () {
         updateSystemStatus();
+        showNotify("服务已启动.", "info");
     });
 }
 
 function stopSystem() {
     ajaxPut("/api/v1/system/service/stop", null, function () {
         updateSystemStatus();
+        showNotify("服务已停止.", "warn");
     })
 }
