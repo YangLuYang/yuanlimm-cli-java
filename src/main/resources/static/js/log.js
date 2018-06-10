@@ -2,7 +2,7 @@
     getWishLogList();
     setInterval(function () {
         getWishLogList();
-    }, 5000);
+    }, 10 * 1000);
 })();
 
 function getWishLogList() {

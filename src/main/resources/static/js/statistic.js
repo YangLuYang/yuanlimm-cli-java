@@ -4,7 +4,7 @@ var $statisticList = $("#div_statistic_list");
     getStatisticInfo();
     setInterval(function () {
         getStatisticInfo();
-    }, 5000);
+    }, 10 * 1000);
 })();
 
 function getStatisticInfo() {
