@@ -83,8 +83,7 @@ public class ControlEngine {
     /**
      * 股票列表
      */
-    @Getter
-    private List<Stock> stockList;
+    private List<Stock> stockList = new ArrayList<>();
     /**
      * 股票Map
      */
@@ -260,8 +259,17 @@ public class ControlEngine {
      * 刷新股票列表
      */
     public void refreshStockList() {
-        StocksResponse response = restTemplate.getForObject("https://www.yuanlimm.com/api/stocks", StocksResponse.class);
-        this.stockList = response.getData();
+        String api = "https://www.yuanlimm.com/api/stocks?page=%d";
+        Integer pageIndex = 1;
+
+        this.stockList.clear();
+
+        StocksResponse response;
+        do {
+            response = restTemplate.getForObject(String.format(api, pageIndex), StocksResponse.class);
+            this.stockList.addAll(response.getData());
+            pageIndex++;
+        } while (response.getData().size() != 0);
 
         this.stockList.forEach(stock -> stockMap.put(stock.getCode(), stock));
     }
