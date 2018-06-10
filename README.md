@@ -68,7 +68,7 @@ java -jar ./xxxx.jar \
 ## 截图
 * Web端
 ![](https://ws1.sinaimg.cn/large/728aabffgy1fs2ywwbntej22i81reh0f.jpg)
-![](https://ws1.sinaimg.cn/large/728aabffgy1fs2ywwdpydj22i81re4h2.jpg)
+![](https://ws1.sinaimg.cn/large/728aabffgy1fs6f4qqb6cj22f21ka7mh.jpg)
 ![](https://ws1.sinaimg.cn/large/728aabffgy1fs2ywwb320j22i81reh2w.jpg)
 ![](https://ws1.sinaimg.cn/large/728aabffgy1fs611b33r6j22j41ns4g2.jpg)
 * Console端
