@@ -18,8 +18,8 @@ function getStatisticInfo() {
 function initChart() {
     var dataCount = 0;
     ajaxGet("/api/v1/statistic", function (result) {
-        if (result.wishStockInfoList) {
-            dataCount = result.wishStockInfoList.length();
+        if (result.data.wishStockInfoList) {
+            dataCount = result.data.wishStockInfoList.length();
         }
     }, false);
 
