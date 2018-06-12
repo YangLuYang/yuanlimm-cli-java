@@ -19,13 +19,22 @@ function initChart() {
     var dataCount = 0;
     ajaxGet("/api/v1/statistic", function (result) {
         if (result.data.wishStockInfoList) {
-            dataCount = result.data.wishStockInfoList.length();
+            dataCount = result.data.wishStockInfoList.length;
         }
     }, false);
 
+    var width = window.innerWidth;
+
+    var ratio = width / 1280;
+    if (ratio > 2) {
+        ratio = 2;
+    } else if (ratio < 0.25) {
+        ratio = 0.25;
+    }
+
     var end = 100;
     if (dataCount > 0) {
-        end = Math.ceil(100 / (dataCount / 20));
+        end = Math.ceil(100 / (dataCount / (30 * ratio)));
         if (end > 100) {
             end = 100;
         }
@@ -56,6 +65,7 @@ function initChart() {
             "axisLabel": {
                 "interval": "0",
                 "rotate": -90,
+                "fontSize": 12,
                 "formatter": function (value) {
                     if (value.length >= 5) {
                         value = value.substring(0, 5);
@@ -112,7 +122,8 @@ function initChart() {
                         position: "top",
                         formatter: function (p) {
                             return p.value > 0 ? (p.value) : '';
-                        }
+                        },
+                        "fontSize": 10
                     }
                 }
             },
