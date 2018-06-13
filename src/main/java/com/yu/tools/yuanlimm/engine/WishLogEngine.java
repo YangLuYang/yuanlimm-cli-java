@@ -1,6 +1,5 @@
 package com.yu.tools.yuanlimm.engine;
 
-import com.yu.tools.yuanlimm.dto.Stock;
 import com.yu.tools.yuanlimm.enums.WishAwardType;
 import com.yu.tools.yuanlimm.model.WishLog;
 import lombok.Getter;
@@ -10,7 +9,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Engine - 许愿日志
@@ -20,11 +20,6 @@ import java.util.*;
 @Lazy(false)
 @Component
 public class WishLogEngine {
-    /**
-     * 未知股票
-     */
-    @Getter
-    private final Map<String, WishLog> unknownWishStock = new HashMap<>();
     /**
      * 队列容量
      */
@@ -47,35 +42,19 @@ public class WishLogEngine {
         if (wishLogList.size() >= QUEUE_SIZE) {
             wishLogList.remove(0);
         }
-        Stock stock = controlEngine.getStockByCode(stockCode);
-        if (stock != null) {
-            wishLogList.add(new WishLog(type, amount, stock, new Date()));
-        } else {
-            synchronized (unknownWishStock) {
-                unknownWishStock.put(stockCode, new WishLog(type, amount, null, new Date()));
-            }
-        }
+
+        wishLogList.add(new WishLog(type, amount, stockCode, new Date()));
     }
 
     /**
      * 处理未知股票
      */
-    @Scheduled(cron = "0/20 * * * * *")
+    @Scheduled(cron = "0/30 * * * * *")
     public void processUnknownWishStock() {
-        if (unknownWishStock.size() == 0) {
-            return;
-        }
-
-        synchronized (unknownWishStock) {
-            controlEngine.refreshStockList();
-            unknownWishStock.forEach((key, value) -> {
-                Stock stock = controlEngine.getStockByCode(key);
-                wishLogList.add(new WishLog(value.getType(), value.getAmount(), stock, new Date()));
-            });
-
-            wishLogList.sort(Comparator.comparing(WishLog::getDate));
-
-            unknownWishStock.clear();
-        }
+        wishLogList.stream()
+                .map(WishLog::getStockCode)
+                .filter(code -> controlEngine.getStockByCode(code) == null)
+                .findAny()
+                .ifPresent(code -> controlEngine.refreshStockList());
     }
 }
