@@ -258,6 +258,7 @@ public class ControlEngine {
     /**
      * 刷新股票列表
      */
+    @Scheduled(cron = "0 0 * * * *")
     public void refreshStockList() {
         String api = "https://www.yuanlimm.com/api/stocks?page=%d";
         Integer pageIndex = 1;
