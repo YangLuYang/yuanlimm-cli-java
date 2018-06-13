@@ -1,4 +1,4 @@
-package com.yu.tools.yuanlimm.model;
+package com.yu.tools.yuanlimm.dto;
 
 import com.yu.tools.yuanlimm.enums.WishAwardType;
 import lombok.AllArgsConstructor;
@@ -9,12 +9,12 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 许愿日志
+ * 许愿日志信息
  */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class WishLog implements Serializable {
+public class WishLogInfo implements Serializable {
     /**
      * 奖励类型
      */
@@ -26,7 +26,7 @@ public class WishLog implements Serializable {
     /**
      * 股票
      */
-    private String stockCode;
+    private Stock stock;
     /**
      * 时间
      */
