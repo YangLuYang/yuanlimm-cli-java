@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Engine - 请求引擎
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({"unused", "WeakerAccess", "Duplicates"})
 @Slf4j
 @Component
 public class RequestEngine {
@@ -144,11 +144,13 @@ public class RequestEngine {
             } catch (HttpClientErrorException e) {
                 if (e.getMessage().contains("429")) {
                     requestSuccessMinuteCounter.add(requestPerMinuteLimit);
-                    log.warn("请求服务器频率超过限制", e);
+                    log.info("请求服务器频率超过限制", e);
                 } else if (e.getMessage().contains("503")) {
-                    log.warn("请求服务器失败", e);
+                    log.info("请求服务器失败", e);
+                } else if (e.getMessage().contains("504")) {
+                    log.info("请求服务器失败", e);
                 } else {
-                    e.printStackTrace();
+                    log.warn("请求服务器失败", e);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
