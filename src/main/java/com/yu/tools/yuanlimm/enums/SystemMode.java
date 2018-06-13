@@ -5,7 +5,7 @@ package com.yu.tools.yuanlimm.enums;
  */
 public enum SystemMode {
     /**
-     * 自动
+     * 自动 (默认)
      * 自动判断启动条件, 满足则自动启动, 不满足则需要Web进一步配置
      */
     auto,
