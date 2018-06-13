@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
@@ -22,7 +23,7 @@ import java.util.*;
 /**
  * Engine - 控制引擎
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({"unused", "WeakerAccess", "Duplicates"})
 @Slf4j
 @Lazy(false)
 @Component
@@ -265,12 +266,27 @@ public class ControlEngine {
 
         this.stockList.clear();
 
-        StocksResponse response;
-        do {
-            response = restTemplate.getForObject(String.format(api, pageIndex), StocksResponse.class);
-            this.stockList.addAll(response.getData());
-            pageIndex++;
-        } while (response.getData().size() != 0);
+        try {
+            StocksResponse response;
+            do {
+                response = restTemplate.getForObject(String.format(api, pageIndex), StocksResponse.class);
+                this.stockList.addAll(response.getData());
+                pageIndex++;
+            } while (response.getData().size() != 0);
+        } catch (HttpClientErrorException e) {
+            if (e.getMessage().contains("429")) {
+                log.info("请求服务器频率超过限制", e);
+            } else if (e.getMessage().contains("503")) {
+                log.info("请求服务器失败", e);
+            } else if (e.getMessage().contains("504")) {
+                log.info("请求服务器失败", e);
+            } else {
+                log.warn("请求服务器失败", e);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         this.stockList.forEach(stock -> stockMap.put(stock.getCode(), stock));
     }
