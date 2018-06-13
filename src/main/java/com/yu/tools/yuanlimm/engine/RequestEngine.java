@@ -144,6 +144,9 @@ public class RequestEngine {
             } catch (HttpClientErrorException e) {
                 if (e.getMessage().contains("429")) {
                     requestSuccessMinuteCounter.add(requestPerMinuteLimit);
+                    log.warn("请求服务器频率超过限制", e);
+                } else if (e.getMessage().contains("503")) {
+                    log.warn("请求服务器失败", e);
                 } else {
                     e.printStackTrace();
                 }
