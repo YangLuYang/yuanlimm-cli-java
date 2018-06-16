@@ -13,7 +13,7 @@
         <module>yuan-li-mm-cluster</module>
     </modules>
 
-    <name>yuan-li-mm-super</name>
+    <name>yuan-li-mm</name>
     <description>Demo project for Spring Boot</description>
 
     <parent>
