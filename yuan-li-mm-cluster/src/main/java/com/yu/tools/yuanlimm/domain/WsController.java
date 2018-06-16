@@ -1,4 +1,4 @@
-package com.yu.tools.yuanlimm.domain.ws;
+package com.yu.tools.yuanlimm.domain;
 
 
 import com.yu.tools.yuanlimm.dto.CommonWebSocketMessage;

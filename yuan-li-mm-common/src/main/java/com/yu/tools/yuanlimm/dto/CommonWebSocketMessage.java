@@ -1,6 +1,6 @@
 package com.yu.tools.yuanlimm.dto;
 
-import com.yu.tools.yuanlimm.enums.WsMessageType;
+import com.yu.tools.yuanlimm.enums.WebSocketMessageType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ public class CommonWebSocketMessage<T> {
     /**
      * 类型
      */
-    private WsMessageType type;
+    private WebSocketMessageType type;
     /**
      * 数据
      */

@@ -1,6 +1,6 @@
 package com.yu.tools.yuanlimm.enums;
 
-public enum WsMessageType {
+public enum WebSocketMessageType {
     /**
      * 状态
      */

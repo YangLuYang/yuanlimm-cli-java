@@ -11,6 +11,7 @@
     <modules>
         <module>yuan-li-mm-cli</module>
         <module>yuan-li-mm-cluster</module>
+        <module>yuan-li-mm-common</module>
     </modules>
 
     <name>yuan-li-mm</name>
