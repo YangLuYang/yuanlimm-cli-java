@@ -2,7 +2,6 @@ package com.yu.tools.yuanlimm.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.messaging.support.ChannelInterceptor;
@@ -10,11 +9,11 @@ import org.springframework.web.socket.config.annotation.AbstractWebSocketMessage
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
-import org.springframework.web.socket.messaging.*;
+import org.springframework.web.socket.server.RequestUpgradeStrategy;
+import org.springframework.web.socket.server.standard.TomcatRequestUpgradeStrategy;
+import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
 import javax.annotation.Resource;
-import java.security.Principal;
-import java.util.Optional;
 
 /**
  * Created by haoyuyang on 2016/11/25.
@@ -35,14 +34,13 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer im
      * @param stompEndpointRegistry stompEndpointRegistry
      */
     public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
-        // 在网页上可以通过"/portfolio"来和服务器的WebSocket连接
-        // 如：http://localhost:8090/portfolio
-        // setAllowedOrigins("*")表示可以跨域
-        // withSockJS()表示支持socktJS访问，在浏览器中使用
-        stompEndpointRegistry
-                .addEndpoint("/portfolio")
-                .setAllowedOrigins("*")
+        RequestUpgradeStrategy upgradeStrategy = new TomcatRequestUpgradeStrategy();
+        stompEndpointRegistry.addEndpoint("/portfolio")
                 .withSockJS();
+
+        stompEndpointRegistry.addEndpoint("/portfolio")
+                .setHandshakeHandler(new DefaultHandshakeHandler(upgradeStrategy))
+                .setAllowedOrigins("*");
     }
 
     /**
@@ -66,53 +64,5 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer im
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(this.interceptor);
-    }
-
-    @EventListener
-    public void SessionConnectEventListener(SessionConnectEvent event) {
-        log.debug(String.format("User %s connecting. SessionId: %s", Optional.ofNullable(event)
-                        .map(AbstractSubProtocolEvent::getUser)
-                        .map(Principal::getName)
-                        .orElse("N/A"),
-                event.getMessage().getHeaders().get("simpSessionId")));
-    }
-
-    @EventListener
-    public void SessionConnectEventListener(SessionConnectedEvent event) {
-        log.debug(String.format("User %s connected. SessionId: %s", Optional.ofNullable(event)
-                        .map(AbstractSubProtocolEvent::getUser)
-                        .map(Principal::getName)
-                        .orElse("N/A"),
-                event.getMessage().getHeaders().get("simpSessionId")));
-    }
-
-    @EventListener
-    public void SessionDisconnectEventListener(SessionDisconnectEvent event) {
-        log.debug(String.format("User %s disconnect. SessionId: %s", Optional.ofNullable(event)
-                        .map(AbstractSubProtocolEvent::getUser)
-                        .map(Principal::getName)
-                        .orElse("N/A"),
-                event.getMessage().getHeaders().get("simpSessionId")));
-    }
-
-    @EventListener
-    public void SessionSubscribeEventListener(SessionSubscribeEvent event) {
-        log.debug(String.format("User %s subscribe. Destination: %s. SessionId: %s. SubscriptionId: %s", Optional.ofNullable(event)
-                        .map(AbstractSubProtocolEvent::getUser)
-                        .map(Principal::getName)
-                        .orElse("N/A"),
-                event.getMessage().getHeaders().get("simpDestination"),
-                event.getMessage().getHeaders().get("simpSessionId"),
-                event.getMessage().getHeaders().get("simpSubscriptionId")));
-    }
-
-    @EventListener
-    public void SessionUnsubscribeEventListener(SessionUnsubscribeEvent event) {
-        log.debug(String.format("User %s unsubscribe. SessionId: %s. SubscriptionId: %s", Optional.ofNullable(event)
-                        .map(AbstractSubProtocolEvent::getUser)
-                        .map(Principal::getName)
-                        .orElse("N/A"),
-                event.getMessage().getHeaders().get("simpSessionId"),
-                event.getMessage().getHeaders().get("simpSubscriptionId")));
     }
 }

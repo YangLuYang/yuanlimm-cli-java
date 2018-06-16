@@ -2,11 +2,12 @@ package com.yu.tools.yuanlimm.engine;
 
 import com.yu.tools.yuanlimm.entity.WorkerNode;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Engine - 集群管理引擎
@@ -20,7 +21,17 @@ public class ClusterCentralEngine {
     /**
      * 工作节点列表
      */
-    private List<WorkerNode> workerNodeList = new LinkedList<>();
+    private Map<String, WorkerNode> onlineWorkerNodeMap = new HashMap<>();
+
+    /**
+     * 节点名称是否存在
+     *
+     * @param workerNode 工作节点
+     * @return 是否存在
+     */
+    public Boolean nodeNameExist(WorkerNode workerNode) {
+        return onlineWorkerNodeMap.containsKey(workerNode.getName());
+    }
 
     /**
      * 节点连接
@@ -28,7 +39,7 @@ public class ClusterCentralEngine {
      * @param workerNode 工作节点
      */
     public void nodeConnected(WorkerNode workerNode) {
-        workerNodeList.add(workerNode);
+        onlineWorkerNodeMap.put(workerNode.getName(), workerNode);
     }
 
     /**
@@ -37,6 +48,8 @@ public class ClusterCentralEngine {
      * @param workerNode 工作节点
      */
     public void nodeDisConnected(WorkerNode workerNode) {
-        workerNodeList.remove(workerNode);
+        if (workerNode != null && StringUtils.isNotBlank(workerNode.getName())) {
+            onlineWorkerNodeMap.remove(workerNode.getName());
+        }
     }
 }

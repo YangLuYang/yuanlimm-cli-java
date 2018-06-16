@@ -3,6 +3,7 @@ package com.yu.tools.yuanlimm.config;
 import com.yu.tools.yuanlimm.engine.ClusterCentralEngine;
 import com.yu.tools.yuanlimm.entity.WorkerNode;
 import com.yu.tools.yuanlimm.exception.PermissionDeniedException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -24,12 +25,17 @@ public class CostumeChannelInterceptorAdapter extends ChannelInterceptorAdapter 
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-            WorkerNode node = new WorkerNode(accessor.getLogin(), accessor.getPasscode(), accessor.getSessionId());
-            accessor.setUser(node);
+            if (StringUtils.isNotBlank(accessor.getLogin())) {
+                WorkerNode node = new WorkerNode(accessor.getLogin(), accessor.getPasscode(), accessor.getSessionId());
+                if (clusterCentralEngine.nodeNameExist(node)) {
+                    // TODO: 2018/6/17  节点名称已存在
+                    return null;
+                }
 
-            clusterCentralEngine.nodeConnected(node);
-        } else {
-            throw new PermissionDeniedException();
+                accessor.setUser(node);
+            } else {
+                throw new PermissionDeniedException();
+            }
         }
         return message;
     }

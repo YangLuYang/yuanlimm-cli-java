@@ -6,7 +6,11 @@
     <groupId>com.yu.tools</groupId>
     <artifactId>yuan-li-mm-super</artifactId>
     <version>0.6.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <modules>
+        <module>yuan-li-mm-cli</module>
+        <module>yuan-li-mm-cluster</module>
+    </modules>
+    <packaging>pom</packaging>
 
     <name>yuan-li-mm-super</name>
     <description>Demo project for Spring Boot</description>
