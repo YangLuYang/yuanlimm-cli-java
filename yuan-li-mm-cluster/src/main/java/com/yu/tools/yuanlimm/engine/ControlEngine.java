@@ -47,11 +47,21 @@ public class ControlEngine {
         this.refreshStockList();
     }
 
-
+    /**
+     * 更新Worker系统状态
+     *
+     * @param workerNode   Worker节点
+     * @param systemStatus 系统状态
+     */
     public void updateWorkerSystemStatus(WorkerNode workerNode, SystemStatus systemStatus) {
         this.workerSystemStatus.put(workerNode.getName(), systemStatus);
     }
 
+    /**
+     * Worker断开连接
+     *
+     * @param workerNode Worker节点
+     */
     public void workerDisconnected(WorkerNode workerNode) {
         this.workerSystemStatus.remove(workerNode.getName());
     }

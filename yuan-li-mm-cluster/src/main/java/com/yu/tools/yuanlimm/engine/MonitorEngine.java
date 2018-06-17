@@ -16,22 +16,42 @@ import java.util.Map;
 /**
  * Engine - 监控引擎
  */
+@SuppressWarnings("WeakerAccess")
 @Slf4j
 @Lazy(false)
 @Component
 public class MonitorEngine {
 
+    /**
+     * Worker监控信息
+     */
     @Getter
     private Map<String, WorkerMonitorInfo> workerMonitorInfo = new HashMap<>();
 
+    /**
+     * Worker断开连接
+     *
+     * @param workerNode Worker节点
+     */
     public void workerDisconnected(WorkerNode workerNode) {
         this.workerMonitorInfo.remove(workerNode.getName());
     }
 
+    /**
+     * 更新Worker监控信息
+     *
+     * @param workerNode        Worker节点
+     * @param workerMonitorInfo 监控信息
+     */
     public void updateWorkerMonitorInfo(WorkerNode workerNode, WorkerMonitorInfo workerMonitorInfo) {
         this.workerMonitorInfo.put(workerNode.getName(), workerMonitorInfo);
     }
 
+    /**
+     * 获取监控信息
+     *
+     * @return 监控信息
+     */
     public MonitorInfoResponse getMonitorInfo() {
         long totalHashSpeed = workerMonitorInfo.entrySet().stream()
                 .map(Map.Entry::getValue)

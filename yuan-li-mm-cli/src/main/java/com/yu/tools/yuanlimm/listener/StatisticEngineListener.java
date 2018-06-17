@@ -1,5 +1,6 @@
 package com.yu.tools.yuanlimm.listener;
 
+import com.yu.tools.yuanlimm.config.WebSocketRouter;
 import com.yu.tools.yuanlimm.dto.WishResponse;
 import com.yu.tools.yuanlimm.dto.WishResultInfo;
 import com.yu.tools.yuanlimm.engine.ClusterWorkerEngine;
@@ -19,16 +20,19 @@ import javax.annotation.Resource;
  */
 @Component
 public class StatisticEngineListener {
-
     /**
      * 统计引擎
      */
     @Resource
     private StatisticEngine statisticEngine;
-
+    /**
+     * 控制引擎
+     */
     @Resource
     private ControlEngine controlEngine;
-
+    /**
+     * 集群Worker引擎
+     */
     @Resource
     private ClusterWorkerEngine clusterWorkerEngine;
 
@@ -42,7 +46,7 @@ public class StatisticEngineListener {
 
         if (controlEngine.getSYSTEM_MODE().equals(SystemMode.worker)) {
             WishResultInfo info = new WishResultInfo(response.getType(), response.getAmount(), response.getStock());
-            clusterWorkerEngine.send("/topic/ws/worker/wishResult", WebSocketMessageType.statistic, info);
+            clusterWorkerEngine.send(WebSocketRouter.SEND_WORKER_WISH_RESULT, WebSocketMessageType.statistic, info);
         }
         statisticEngine.record(response.getType(), response.getAmount(), response.getStock());
     }

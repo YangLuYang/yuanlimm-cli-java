@@ -59,7 +59,7 @@ public class ClusterCentralEngine {
      *
      * @param workerNode 工作节点
      */
-    public void nodeDisConnected(WorkerNode workerNode) {
+    public void nodeDisconnected(WorkerNode workerNode) {
         if (workerNode != null && StringUtils.isNotBlank(workerNode.getName())) {
             monitorEngine.workerDisconnected(workerNode);
             controlEngine.workerDisconnected(workerNode);

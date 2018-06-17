@@ -25,13 +25,22 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/")
 public class StatisticController {
-
+    /**
+     * 控制引擎
+     */
     @Resource
     private ControlEngine controlEngine;
-
+    /**
+     * 统计引擎
+     */
     @Resource
     private StatisticEngine statisticEngine;
 
+    /**
+     * 获取统计信息
+     *
+     * @return 消息
+     */
     @GetMapping(path = "/v1/statistic")
     public Message getStatisticInfo() {
         AtomicLong wishCoinAmount = statisticEngine.getWishCoinAmount();

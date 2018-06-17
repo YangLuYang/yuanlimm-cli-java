@@ -15,10 +15,17 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/api/")
 public class MonitorController {
-
+    /**
+     * 监控引擎
+     */
     @Resource
     private MonitorEngine monitorEngine;
 
+    /**
+     * 获取监控信息
+     *
+     * @return 监控信息
+     */
     @GetMapping(path = "/v1/monitor")
     public Message getMonitorInfo() {
         MonitorInfoResponse info = monitorEngine.getMonitorInfo();

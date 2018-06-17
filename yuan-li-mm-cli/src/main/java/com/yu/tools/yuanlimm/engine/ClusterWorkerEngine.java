@@ -1,5 +1,6 @@
 package com.yu.tools.yuanlimm.engine;
 
+import com.yu.tools.yuanlimm.config.WebSocketRouter;
 import com.yu.tools.yuanlimm.dto.CommonWebSocketMessage;
 import com.yu.tools.yuanlimm.dto.Stock;
 import com.yu.tools.yuanlimm.dto.WorkStatisticInfo;
@@ -40,28 +41,45 @@ import java.util.stream.Collectors;
 @Lazy(false)
 @Component
 public class ClusterWorkerEngine {
-
+    /**
+     * 控制引擎
+     */
     @Resource
     private ControlEngine controlEngine;
-
+    /**
+     * 监控引擎
+     */
     @Resource
     private MonitorEngine monitorEngine;
-
+    /**
+     * 计算引擎
+     */
     @Resource
     private ComputeEngine computeEngine;
-
+    /**
+     * 统计引擎
+     */
     @Resource
     private StatisticEngine statisticEngine;
-
+    /**
+     * Stomp消息处理器
+     */
     @Resource
     private CustomStompSessionHandler customStompSessionHandler;
-
+    /**
+     * WebSocket消息队列
+     */
     private LinkedBlockingQueue<PackedWebSocketMessage> webSocketMessageQueue = new LinkedBlockingQueue<>();
-
+    /**
+     * WebSocket会话
+     */
     @Getter
     @Setter
     private StompSession session;
 
+    /**
+     * 初始化Worker
+     */
     public void init() {
         String url = "ws://localhost:8080/portfolio";
 
@@ -127,10 +145,23 @@ public class ClusterWorkerEngine {
         }
     }
 
+    /**
+     * 发送消息
+     *
+     * @param message 消息
+     */
     public void send(PackedWebSocketMessage message) {
         session.send(message.getDestination(), message.getMessage());
     }
 
+    /**
+     * 订阅
+     *
+     * @param destination 目标
+     * @param type        消息类型
+     * @param consumer    消费者
+     * @param <T>         消息类型
+     */
     public <T> void subscribe(String destination, Class<T> type, Consumer<T> consumer) {
         session.subscribe(destination, new StompFrameHandler() {
 
@@ -147,15 +178,21 @@ public class ClusterWorkerEngine {
         });
     }
 
+    /**
+     * 开始发送状态
+     */
     public void startSendStatus() {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                send("/topic/ws/worker/status", WebSocketMessageType.status, controlEngine.getSYSTEM_STATUS());
+                send(WebSocketRouter.SEND_WORKER_STATUS, WebSocketMessageType.status, controlEngine.getSYSTEM_STATUS());
             }
         }, 1000, 1000);
     }
 
+    /**
+     * 开始发送监控
+     */
     public void startSendMonitor() {
         new Timer().schedule(new TimerTask() {
             @Override
@@ -165,11 +202,15 @@ public class ClusterWorkerEngine {
                 Integer hard = controlEngine.getHASH_HARD();
                 WorkerMonitorInfo info = new WorkerMonitorInfo(hashSpeed, hard, totalHash, new Date());
 
-                send("/topic/ws/worker/monitor", WebSocketMessageType.monitor, info);
+                send(WebSocketRouter.SEND_WORKER_MONITOR, WebSocketMessageType.monitor, info);
             }
         }, 1000, 1000);
     }
 
+    /**
+     * 开始发送统计信息
+     */
+    @SuppressWarnings("unused")
     public void startSendStatistic() {
         new Timer().schedule(new TimerTask() {
             @Override
@@ -192,12 +233,15 @@ public class ClusterWorkerEngine {
 
                 WorkStatisticInfo info = new WorkStatisticInfo(stockInfoList, wishCoinAmount.get(), wishStockAmount.get());
 
-                send("/topic/ws/worker/statistic", WebSocketMessageType.statistic, info);
+                send(WebSocketRouter.SEND_WORKER_STATISTIC, WebSocketMessageType.statistic, info);
             }
         }, 1000, 1000);
     }
 
+    /**
+     * 开始监听配置
+     */
     public void startListenConfig() {
-        this.subscribe("/user/topic/config", String.class, System.out::println);
+        this.subscribe(WebSocketRouter.RECEIVE_WORKER_CONFIG, String.class, System.out::println);
     }
 }

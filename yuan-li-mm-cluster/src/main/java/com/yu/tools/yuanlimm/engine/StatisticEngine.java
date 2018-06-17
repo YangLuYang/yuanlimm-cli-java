@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Engine - 统计引擎
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 @Slf4j
 @Lazy(false)
 @Component
@@ -44,7 +44,6 @@ public class StatisticEngine {
     /**
      * 记录许愿
      */
-    @SuppressWarnings("Duplicates")
     public void record(WishAwardType type, Long amount, String stockCode) {
         if (type.equals(WishAwardType.stock)) {
             AtomicLong atomicLong = wishStock.get(stockCode);

@@ -15,6 +15,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
+/**
+ * CostumeChannelInterceptorAdapter
+ */
 @Component
 public class CostumeChannelInterceptorAdapter extends ChannelInterceptorAdapter implements ChannelInterceptor {
 

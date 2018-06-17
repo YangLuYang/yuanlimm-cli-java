@@ -13,6 +13,9 @@ import javax.annotation.Resource;
 import java.security.Principal;
 import java.util.Optional;
 
+/**
+ * WebSocketListener
+ */
 @Slf4j
 @Component
 public class WebSocketListener {
@@ -50,7 +53,7 @@ public class WebSocketListener {
                 event.getMessage().getHeaders().get("simpSessionId")));
 
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(event.getMessage(), StompHeaderAccessor.class);
-        clusterCentralEngine.nodeDisConnected((WorkerNode) accessor.getUser());
+        clusterCentralEngine.nodeDisconnected((WorkerNode) accessor.getUser());
     }
 
     @EventListener

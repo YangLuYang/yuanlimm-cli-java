@@ -16,7 +16,7 @@ import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 import javax.annotation.Resource;
 
 /**
- * Created by haoyuyang on 2016/11/25.
+ * WebSocketConfig
  */
 @Slf4j
 @Configuration

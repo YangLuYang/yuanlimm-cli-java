@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
+/**
+ * CustomStompSessionHandler
+ */
 @Component
 public class CustomStompSessionHandler extends StompSessionHandlerAdapter {
 

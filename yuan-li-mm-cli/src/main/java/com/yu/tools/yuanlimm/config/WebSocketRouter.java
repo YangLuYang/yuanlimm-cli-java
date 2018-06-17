@@ -5,11 +5,23 @@ package com.yu.tools.yuanlimm.config;
  */
 public class WebSocketRouter {
     /**
-     * Worker信息
+     * 接收 - Worker配置
      */
-    public static final String SERVER_INFO = "/topic/worker/info";
+    public static final String RECEIVE_WORKER_CONFIG = "/user/topic/worker/config";
     /**
-     * Worker控制
+     * 发送 - Worker许愿结果
      */
-    public static final String SERVER_CONTROL = "/topic/worker/control";
+    public static final String SEND_WORKER_WISH_RESULT = "/topic/ws/worker/wishResult";
+    /**
+     * 发送 - Worker状态
+     */
+    public static final String SEND_WORKER_STATUS = "/topic/ws/worker/status";
+    /**
+     * 发送 - Worker监控
+     */
+    public static final String SEND_WORKER_MONITOR = "/topic/ws/worker/monitor";
+    /**
+     * 发送 - Worker统计
+     */
+    public static final String SEND_WORKER_STATISTIC = "/topic/ws/worker/statistic";
 }
