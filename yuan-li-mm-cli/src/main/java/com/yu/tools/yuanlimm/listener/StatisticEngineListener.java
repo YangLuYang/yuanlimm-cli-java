@@ -1,7 +1,12 @@
 package com.yu.tools.yuanlimm.listener;
 
 import com.yu.tools.yuanlimm.dto.WishResponse;
+import com.yu.tools.yuanlimm.dto.WishResultInfo;
+import com.yu.tools.yuanlimm.engine.ClusterWorkerEngine;
+import com.yu.tools.yuanlimm.engine.ControlEngine;
 import com.yu.tools.yuanlimm.engine.StatisticEngine;
+import com.yu.tools.yuanlimm.enums.SystemMode;
+import com.yu.tools.yuanlimm.enums.WebSocketMessageType;
 import com.yu.tools.yuanlimm.event.WishSuccessEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -21,6 +26,12 @@ public class StatisticEngineListener {
     @Resource
     private StatisticEngine statisticEngine;
 
+    @Resource
+    private ControlEngine controlEngine;
+
+    @Resource
+    private ClusterWorkerEngine clusterWorkerEngine;
+
     /**
      * 许愿成功事件监听
      */
@@ -28,6 +39,11 @@ public class StatisticEngineListener {
     @EventListener(WishSuccessEvent.class)
     public void WishSuccessEventListener(WishSuccessEvent event) {
         WishResponse response = event.getWishResponse();
+
+        if (controlEngine.getSYSTEM_MODE().equals(SystemMode.worker)) {
+            WishResultInfo info = new WishResultInfo(response.getType(), response.getAmount(), response.getStock());
+            clusterWorkerEngine.send("/ws/worker/statistic", WebSocketMessageType.statistic, info);
+        }
         statisticEngine.record(response.getType(), response.getAmount(), response.getStock());
     }
 }

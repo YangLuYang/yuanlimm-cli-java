@@ -1,14 +1,13 @@
 package com.yu.tools.yuanlimm.engine;
 
-import com.yu.tools.yuanlimm.dto.WorkStatisticInfo;
-import com.yu.tools.yuanlimm.dto.WorkerMonitorInfo;
 import com.yu.tools.yuanlimm.entity.WorkerNode;
-import com.yu.tools.yuanlimm.enums.SystemStatus;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,13 +22,18 @@ public class ClusterCentralEngine {
     /**
      * 工作节点列表
      */
+    @Getter
     private Map<String, WorkerNode> onlineWorker = new HashMap<>();
-
-    private Map<String, SystemStatus> workerSystemStatus = new HashMap<>();
-
-    private Map<String, WorkerMonitorInfo> workerMonitorInfo = new HashMap<>();
-
-    private Map<String, WorkStatisticInfo> workerStatisticInfo = new HashMap<>();
+    /**
+     * 监控引擎
+     */
+    @Resource
+    private MonitorEngine monitorEngine;
+    /**
+     * 控制引擎
+     */
+    @Resource
+    private ControlEngine controlEngine;
 
     /**
      * 节点名称是否存在
@@ -57,6 +61,8 @@ public class ClusterCentralEngine {
      */
     public void nodeDisConnected(WorkerNode workerNode) {
         if (workerNode != null && StringUtils.isNotBlank(workerNode.getName())) {
+            monitorEngine.workerDisconnected(workerNode);
+            controlEngine.workerDisconnected(workerNode);
             onlineWorker.remove(workerNode.getName());
         }
     }

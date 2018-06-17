@@ -163,7 +163,7 @@ public class ClusterWorkerEngine {
                 Long hashSpeed = monitorEngine.getLastHashSpeed();
                 Long totalHash = computeEngine.getHashCounter().get();
                 Integer hard = controlEngine.getHASH_HARD();
-                WorkerMonitorInfo info = new WorkerMonitorInfo(hashSpeed, hard, totalHash);
+                WorkerMonitorInfo info = new WorkerMonitorInfo(hashSpeed, hard, totalHash, new Date());
 
                 send("/topic/ws/worker/monitor", WebSocketMessageType.monitor, info);
             }

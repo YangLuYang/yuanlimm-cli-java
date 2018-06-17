@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 许愿统计信息响应
@@ -16,4 +17,5 @@ public class WorkerMonitorInfo implements Serializable {
     private Long hashSpeed;
     private Integer hard;
     private Long totalHash;
+    private Date createDate;
 }
