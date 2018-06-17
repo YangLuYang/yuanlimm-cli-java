@@ -26,7 +26,7 @@ public class CostumeChannelInterceptorAdapter extends ChannelInterceptorAdapter 
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             if (StringUtils.isNotBlank(accessor.getLogin())) {
-                WorkerNode node = new WorkerNode(accessor.getLogin(), accessor.getPasscode(), accessor.getSessionId());
+                WorkerNode node = new WorkerNode(accessor.getLogin(), accessor.getSessionId());
                 if (clusterCentralEngine.nodeNameExist(node)) {
                     // TODO: 2018/6/17  节点名称已存在
                     return null;

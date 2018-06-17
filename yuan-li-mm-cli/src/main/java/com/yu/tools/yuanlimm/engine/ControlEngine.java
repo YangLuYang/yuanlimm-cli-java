@@ -104,6 +104,8 @@ public class ControlEngine {
      */
     @Resource(name = "requestEngine")
     private RequestEngine requestEngine;
+    @Resource(name = "clusterWorkerEngine")
+    private ClusterWorkerEngine clusterWorkerEngine;
 
     /**
      * Init
@@ -122,29 +124,20 @@ public class ControlEngine {
             }
             break;
             case console: {
-                Scanner scanner = new Scanner(System.in);
-
-                if (StringUtils.isBlank(this.WALLET_ADDRESS)) {
-                    this.WALLET_ADDRESS = inputWalletAddress(scanner);
-                }
-
-                if (Objects.isNull(this.COMPUTE_THREAD)) {
-                    this.COMPUTE_THREAD = inputComputeThread(scanner);
-                }
-
-                if (StringUtils.isBlank(this.STOCK_CODE)) {
-                    Stock stock = stockChoice(scanner);
-                    this.STOCK_CODE = stock.getCode();
-                }
-
-                scanner.close();
-
+                this.inputConfig();
                 this.updateConfig();
                 this.startService();
             }
             break;
             case web: {
                 this.updateConfig();
+            }
+            break;
+            case worker: {
+                this.inputConfig();
+                this.updateConfig();
+                clusterWorkerEngine.init();
+                this.startService();
             }
             break;
         }
@@ -180,6 +173,28 @@ public class ControlEngine {
         requestEngine.stop();
         this.SYSTEM_STATUS = SystemStatus.stopped;
         System.out.println("Service has been stopped.");
+    }
+
+    /**
+     * 输入配置
+     */
+    public void inputConfig() {
+        Scanner scanner = new Scanner(System.in);
+
+        if (StringUtils.isBlank(this.WALLET_ADDRESS)) {
+            this.WALLET_ADDRESS = inputWalletAddress(scanner);
+        }
+
+        if (Objects.isNull(this.COMPUTE_THREAD)) {
+            this.COMPUTE_THREAD = inputComputeThread(scanner);
+        }
+
+        if (StringUtils.isBlank(this.STOCK_CODE)) {
+            Stock stock = stockChoice(scanner);
+            this.STOCK_CODE = stock.getCode();
+        }
+
+        scanner.close();
     }
 
     /**

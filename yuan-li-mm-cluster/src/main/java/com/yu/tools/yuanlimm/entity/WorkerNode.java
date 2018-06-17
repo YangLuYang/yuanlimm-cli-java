@@ -14,10 +14,6 @@ import java.security.Principal;
 @AllArgsConstructor
 public class WorkerNode implements Principal {
     /**
-     * Id
-     */
-    private String id;
-    /**
      * 名称
      */
     private String name;

@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 /**
  * RestController - Statistic
  */
+@SuppressWarnings("Duplicates")
 @RestController
 @RequestMapping("/api/")
 public class StatisticController {
