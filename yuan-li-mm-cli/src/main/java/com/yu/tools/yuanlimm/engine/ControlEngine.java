@@ -53,6 +53,14 @@ public class ControlEngine {
     @Setter
     @Value("${config.workerName:}")
     private String WORKER_NAME;
+    @Getter
+    @Setter
+    @Value("${config.workerHost:}")
+    private String WORKER_HOST;
+    @Getter
+    @Setter
+    @Value("${config.workerPort:}")
+    private String WORKER_PORT;
     /**
      * 股票代码
      */
@@ -140,8 +148,8 @@ public class ControlEngine {
             case worker: {
                 this.inputConfig();
                 this.initConfig();
-                clusterWorkerEngine.init();
-                this.startService();
+                this.clusterWorkerEngine.init();
+                //Start in clusterWorkerEngine connect success event.
             }
             break;
         }
@@ -185,6 +193,20 @@ public class ControlEngine {
     public void inputConfig() {
         Scanner scanner = new Scanner(System.in);
 
+        if (this.SYSTEM_MODE.equals(SystemMode.worker)) {
+            if (StringUtils.isBlank(this.WORKER_NAME)) {
+                this.WORKER_NAME = inputWorkerName(scanner);
+            }
+
+            if (StringUtils.isBlank(this.WORKER_HOST)) {
+                this.WORKER_HOST = inputWorkerHost(scanner);
+            }
+
+            if (StringUtils.isBlank(this.WORKER_PORT)) {
+                this.WORKER_PORT = inputWorkerPort(scanner);
+            }
+        }
+
         if (StringUtils.isBlank(this.WALLET_ADDRESS)) {
             this.WALLET_ADDRESS = inputWalletAddress(scanner);
         }
@@ -206,10 +228,6 @@ public class ControlEngine {
      */
     public void initConfig() {
         this.updateConfig(this.COMPUTE_THREAD, this.WALLET_ADDRESS, this.STOCK_CODE, this.CHEER_WORD);
-
-        this.WORKER_NAME = Optional.of(this.WORKER_NAME)
-                .filter(StringUtils::isNotBlank)
-                .orElse(UUID.randomUUID().toString());
     }
 
     /**
@@ -398,6 +416,88 @@ public class ControlEngine {
         } while (StringUtils.isBlank(address));
 
         return address;
+    }
+
+    /**
+     * 输入Worker名称
+     *
+     * @param scanner Scanner
+     * @return Worker名称
+     */
+    private String inputWorkerName(Scanner scanner) {
+        System.out.println("请输入Worker名称, 输入后按回车确认. 输入 * 将随机生成名称." +
+                "\n注意: 该Worker名称在单个集群内唯一, 重复的名称将被拒绝接入集群.");
+
+        String input = null;
+
+        do {
+            if (scanner.hasNext()) {
+                input = scanner.nextLine();
+            } else {
+                scanner.nextLine();
+                System.out.println("您输入的Worker名称无效, 请重新输入.");
+            }
+        } while (StringUtils.isBlank(input));
+
+        if ("*".equals(input)) {
+            input = UUID.randomUUID().toString();
+        }
+
+        return input;
+    }
+
+    /**
+     * 输入WorkerHost
+     *
+     * @param scanner Scanner
+     * @return Worker名称
+     */
+    private String inputWorkerHost(Scanner scanner) {
+        System.out.println("请输入Worker主机地址(IP/域名), 输入后按回车确认. 输入 * 将设置为localhost.");
+
+        String input = null;
+
+        do {
+            if (scanner.hasNext()) {
+                input = scanner.nextLine();
+            } else {
+                scanner.nextLine();
+                System.out.println("您输入的Worker主机地址无效, 请重新输入.");
+            }
+        } while (StringUtils.isBlank(input));
+
+        if ("*".equals(input)) {
+            input = "localhost";
+        }
+
+        return input;
+    }
+
+    /**
+     * 输入WorkerPort
+     *
+     * @param scanner Scanner
+     * @return Worker端口
+     */
+    private String inputWorkerPort(Scanner scanner) {
+        System.out.println("请输入Worker端口, 输入后按回车确认. 输入 * 将设置为8080.");
+
+        String input = null;
+
+        do {
+            if (scanner.hasNext()) {
+                input = scanner.nextLine();
+            } else {
+                scanner.nextLine();
+                System.out.println("您输入的Worker端口无效, 请重新输入.");
+            }
+        } while (StringUtils.isBlank(input));
+
+        if ("*".equals(input)) {
+            input = "8080";
+        }
+
+        return input;
     }
 
     /**

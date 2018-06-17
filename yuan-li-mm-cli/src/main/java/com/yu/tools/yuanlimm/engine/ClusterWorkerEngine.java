@@ -81,7 +81,9 @@ public class ClusterWorkerEngine {
      * 初始化Worker
      */
     public void init() {
-        String url = "ws://localhost:8080/portfolio";
+        String url = String.format("ws://%s:%s/portfolio",
+                controlEngine.getWORKER_HOST(),
+                controlEngine.getWORKER_PORT());
 
         WebSocketClient webSocketClient = new StandardWebSocketClient();
         WebSocketStompClient stompClient = new WebSocketStompClient(webSocketClient);
@@ -102,7 +104,8 @@ public class ClusterWorkerEngine {
             }
         }, 5000L);
 
-        ListenableFuture<StompSession> connect = stompClient.connect(url, (WebSocketHttpHeaders) null, headers, customStompSessionHandler);
+        ListenableFuture<StompSession> connect = stompClient.connect(url, (WebSocketHttpHeaders) null, headers,
+                customStompSessionHandler);
         connect.addCallback(new ListenableFutureCallback<StompSession>() {
             @Override
             public void onFailure(Throwable throwable) {
@@ -114,6 +117,7 @@ public class ClusterWorkerEngine {
             public void onSuccess(StompSession stompSession) {
                 timer.cancel();
                 System.out.println("连接成功");
+                controlEngine.startService();
             }
         });
 

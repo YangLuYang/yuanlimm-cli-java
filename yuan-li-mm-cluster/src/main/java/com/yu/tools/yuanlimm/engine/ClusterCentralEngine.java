@@ -52,6 +52,7 @@ public class ClusterCentralEngine {
      */
     public void nodeConnected(WorkerNode workerNode) {
         onlineWorker.put(workerNode.getName(), workerNode);
+        System.out.println(String.format("Worker: %s\t Connected.", workerNode.getName()));
     }
 
     /**
@@ -64,6 +65,7 @@ public class ClusterCentralEngine {
             monitorEngine.workerDisconnected(workerNode);
             controlEngine.workerDisconnected(workerNode);
             onlineWorker.remove(workerNode.getName());
+            System.out.println(String.format("Worker: %s\t Disconnected.", workerNode.getName()));
         }
     }
 }

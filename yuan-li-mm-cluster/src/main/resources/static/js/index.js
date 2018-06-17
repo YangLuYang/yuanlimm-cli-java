@@ -1,4 +1,5 @@
 (function () {
+    updateMonitorInfo();
     setInterval(function () {
         updateMonitorInfo();
     }, 1000);
