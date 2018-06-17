@@ -30,6 +30,7 @@ public class CustomStompSessionHandler extends StompSessionHandlerAdapter {
     public void handleTransportError(StompSession session, Throwable exception) {
         super.handleTransportError(session, exception);
         if (exception instanceof ConnectionLostException) {
+            System.out.println("连接断开，程序即将退出");
             System.exit(1);
         }
     }

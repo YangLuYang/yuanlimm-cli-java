@@ -49,6 +49,10 @@ public class ControlEngine {
     @Setter
     @Value("${config.computeThread:}")
     private Integer COMPUTE_THREAD;
+    @Getter
+    @Setter
+    @Value("${config.workerName:}")
+    private String WORKER_NAME;
     /**
      * 股票代码
      */
@@ -117,7 +121,7 @@ public class ControlEngine {
 
         switch (this.SYSTEM_MODE) {
             case auto: {
-                this.updateConfig();
+                this.initConfig();
                 if (this.SYSTEM_STATUS.equals(SystemStatus.stopped)) {
                     this.startService();
                 }
@@ -125,17 +129,17 @@ public class ControlEngine {
             break;
             case console: {
                 this.inputConfig();
-                this.updateConfig();
+                this.initConfig();
                 this.startService();
             }
             break;
             case web: {
-                this.updateConfig();
+                this.initConfig();
             }
             break;
             case worker: {
                 this.inputConfig();
-                this.updateConfig();
+                this.initConfig();
                 clusterWorkerEngine.init();
                 this.startService();
             }
@@ -200,8 +204,12 @@ public class ControlEngine {
     /**
      * 更新系统配置
      */
-    public void updateConfig() {
+    public void initConfig() {
         this.updateConfig(this.COMPUTE_THREAD, this.WALLET_ADDRESS, this.STOCK_CODE, this.CHEER_WORD);
+
+        this.WORKER_NAME = Optional.of(this.WORKER_NAME)
+                .filter(StringUtils::isNotBlank)
+                .orElse(UUID.randomUUID().toString());
     }
 
     /**
@@ -227,6 +235,7 @@ public class ControlEngine {
                         .filter(num -> num <= 16)
                         .orElse(16))
                 .orElse(null);
+
         this.WALLET_ADDRESS = walletAddress;
         this.STOCK_CODE = stockCode;
         this.CHEER_WORD = cheerWord;

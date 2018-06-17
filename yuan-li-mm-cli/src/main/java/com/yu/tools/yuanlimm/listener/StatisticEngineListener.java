@@ -42,7 +42,7 @@ public class StatisticEngineListener {
 
         if (controlEngine.getSYSTEM_MODE().equals(SystemMode.worker)) {
             WishResultInfo info = new WishResultInfo(response.getType(), response.getAmount(), response.getStock());
-            clusterWorkerEngine.send("/ws/worker/statistic", WebSocketMessageType.statistic, info);
+            clusterWorkerEngine.send("/topic/ws/worker/wishResult", WebSocketMessageType.statistic, info);
         }
         statisticEngine.record(response.getType(), response.getAmount(), response.getStock());
     }

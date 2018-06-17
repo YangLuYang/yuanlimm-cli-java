@@ -71,7 +71,7 @@ public class ClusterWorkerEngine {
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         StompHeaders headers = new StompHeaders();
-        headers.add("login", "yu");
+        headers.add("login", controlEngine.getWORKER_NAME());
 
         System.out.println("正在连接...");
 
