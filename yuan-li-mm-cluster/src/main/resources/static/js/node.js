@@ -19,13 +19,13 @@ function getWorkerNodeList() {
                 add(info.workerNode.name, info.workerMonitorInfo.hashSpeed, info.systemStatus)
             });
         } else {
-            add("[无已连接节点]", "N/A", "N/A");
+            addPlaceholder();
         }
     });
 }
 
 function add(title, speed, status) {
-    $workerNodeList.prepend(
+    $workerNodeList.append(
         $("<div>").addClass("col-md-6 col-lg-4").append(
             $("<div>").addClass("project-card-no-image big").append(
                 $("<h3>").text(title)
@@ -33,9 +33,8 @@ function add(title, speed, status) {
                 $("<h4>").text(speed + " Hash/s")
             ).append(
                 $("<button>")
-                    .addClass("btn btn-outline-primary btn-sm btn-worker-node-config disabled")
+                    .addClass("btn btn-outline-primary btn-sm btn-worker-node-config")
                     .text("Config")
-                    .attr("disabled", true)
             ).append(
                 $("<div>").addClass("tags").append(
                     $("<a>").text(status)
@@ -44,3 +43,25 @@ function add(title, speed, status) {
         )
     );
 }
+
+function addPlaceholder() {
+    $workerNodeList.append(
+        $("<div>").addClass("col-md-6 col-lg-4").append(
+            $("<div>").addClass("project-card-no-image big").append(
+                $("<h3>").text("[无已连接节点]")
+            ).append(
+                $("<h4>").text("N/A" + " Hash/s")
+            ).append(
+                $("<button>")
+                    .addClass("btn btn-outline-primary btn-sm btn-worker-node-config disabled")
+                    .text("Config")
+                    .attr("disabled", true)
+            ).append(
+                $("<div>").addClass("tags").append(
+                    $("<a>").text("N/A")
+                )
+            )
+        )
+    );
+}
+
