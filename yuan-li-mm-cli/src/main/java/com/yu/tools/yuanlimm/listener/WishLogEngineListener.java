@@ -1,8 +1,8 @@
 package com.yu.tools.yuanlimm.listener;
 
 import com.yu.tools.yuanlimm.config.WebSocketRouter;
-import com.yu.tools.yuanlimm.dto.api.WishLogInfo;
 import com.yu.tools.yuanlimm.dto.extra.WishResponse;
+import com.yu.tools.yuanlimm.dto.ws.WsWishLogInfo;
 import com.yu.tools.yuanlimm.engine.ClusterWorkerEngine;
 import com.yu.tools.yuanlimm.engine.ControlEngine;
 import com.yu.tools.yuanlimm.engine.WishLogEngine;
@@ -46,7 +46,7 @@ public class WishLogEngineListener {
         WishResponse response = event.getWishResponse();
 
         if (controlEngine.getSYSTEM_MODE().equals(SystemMode.worker)) {
-            WishLogInfo info = new WishLogInfo(response.getType(), response.getAmount(), response.getStock(), new Date());
+            WsWishLogInfo info = new WsWishLogInfo(response.getType(), response.getAmount(), response.getStock(), new Date());
             clusterWorkerEngine.send(WebSocketRouter.SEND_WORKER_WISH_LOG, WebSocketMessageType.statisticInfo, info);
         }
         wishLogEngine.record(response.getType(), response.getAmount(), response.getStock());

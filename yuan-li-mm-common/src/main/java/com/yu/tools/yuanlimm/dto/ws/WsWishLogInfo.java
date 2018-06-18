@@ -1,7 +1,6 @@
-package com.yu.tools.yuanlimm.dto.api;
+package com.yu.tools.yuanlimm.dto.ws;
 
 import com.yu.tools.yuanlimm.enums.WishAwardType;
-import com.yu.tools.yuanlimm.model.Stock;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class WishLogInfo implements Serializable {
+public class WsWishLogInfo implements Serializable {
     /**
      * 奖励类型
      */
@@ -27,7 +26,7 @@ public class WishLogInfo implements Serializable {
     /**
      * 股票
      */
-    private Stock stock;
+    private String stockCode;
     /**
      * 时间
      */

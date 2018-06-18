@@ -1,12 +1,10 @@
 package com.yu.tools.yuanlimm.domain.ws;
 
-import com.yu.tools.yuanlimm.dto.ws.CommonWebSocketMessage;
-import com.yu.tools.yuanlimm.dto.ws.WishResultInfo;
-import com.yu.tools.yuanlimm.dto.ws.WorkComputeInfo;
-import com.yu.tools.yuanlimm.dto.ws.WorkerMonitorInfo;
+import com.yu.tools.yuanlimm.dto.ws.*;
 import com.yu.tools.yuanlimm.engine.ControlEngine;
 import com.yu.tools.yuanlimm.engine.MonitorEngine;
 import com.yu.tools.yuanlimm.engine.StatisticEngine;
+import com.yu.tools.yuanlimm.engine.WishLogEngine;
 import com.yu.tools.yuanlimm.entity.WorkerNode;
 import com.yu.tools.yuanlimm.enums.SystemStatus;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -37,6 +35,11 @@ public class WorkerController {
      */
     @Resource
     private ControlEngine controlEngine;
+    /**
+     * 许愿日志引擎
+     */
+    @Resource
+    private WishLogEngine wishLogEngine;
 
     /**
      * Worker状态
@@ -47,6 +50,18 @@ public class WorkerController {
     @MessageMapping("/status")
     public void workerStatus(CommonWebSocketMessage<SystemStatus> message, Principal principal) {
         controlEngine.updateWorkerSystemStatus((WorkerNode) principal, message.getData());
+    }
+
+    /**
+     * Worker许愿日志
+     *
+     * @param message   消息
+     * @param principal principal
+     */
+    @MessageMapping("/wishLog")
+    public void workerWishLog(CommonWebSocketMessage<WsWishLogInfo> message, Principal principal) {
+        WsWishLogInfo info = message.getData();
+        wishLogEngine.record(info.getType(), info.getAmount(), info.getStockCode());
     }
 
     /**
