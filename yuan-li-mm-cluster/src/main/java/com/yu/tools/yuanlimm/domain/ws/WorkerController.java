@@ -49,13 +49,13 @@ public class WorkerController {
     }
 
     /**
-     * Worker监控
+     * Worker监控信息
      *
      * @param message   消息
      * @param principal principal
      */
-    @MessageMapping("/monitor")
-    public void workerMonitor(CommonWebSocketMessage<WorkerMonitorInfo> message, Principal principal) {
+    @MessageMapping("/monitorInfo")
+    public void workerMonitorInfo(CommonWebSocketMessage<WorkerMonitorInfo> message, Principal principal) {
         monitorEngine.updateWorkerMonitorInfo((WorkerNode) principal, message.getData());
     }
 

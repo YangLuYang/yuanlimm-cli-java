@@ -6,13 +6,17 @@ public enum WebSocketMessageType {
      */
     status,
     /**
-     * 监控
+     * 监控信息
      */
-    monitor,
+    monitorInfo,
     /**
-     * 统计
+     * 统计信息
      */
-    statistic,
+    statisticInfo,
+    /**
+     * 计算信息
+     */
+    computeInfo,
     /**
      * 配置
      */

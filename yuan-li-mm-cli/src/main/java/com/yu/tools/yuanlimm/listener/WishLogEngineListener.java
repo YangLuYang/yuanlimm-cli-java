@@ -47,7 +47,7 @@ public class WishLogEngineListener {
 
         if (controlEngine.getSYSTEM_MODE().equals(SystemMode.worker)) {
             WishLogInfo info = new WishLogInfo(response.getType(), response.getAmount(), response.getStock(), new Date());
-            clusterWorkerEngine.send(WebSocketRouter.SEND_WORKER_WISH_LOG, WebSocketMessageType.statistic, info);
+            clusterWorkerEngine.send(WebSocketRouter.SEND_WORKER_WISH_LOG, WebSocketMessageType.statisticInfo, info);
         }
         wishLogEngine.record(response.getType(), response.getAmount(), response.getStock());
     }

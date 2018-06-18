@@ -206,7 +206,7 @@ public class ClusterWorkerEngine {
                 Integer hard = controlEngine.getHASH_HARD();
                 WorkerMonitorInfo info = new WorkerMonitorInfo(hashSpeed, hard, totalHash, new Date());
 
-                send(WebSocketRouter.SEND_WORKER_MONITOR, WebSocketMessageType.monitor, info);
+                send(WebSocketRouter.SEND_WORKER_MONITOR, WebSocketMessageType.monitorInfo, info);
             }
         }, 1000, 1000);
     }
@@ -237,7 +237,7 @@ public class ClusterWorkerEngine {
 
                 WorkStatisticInfo info = new WorkStatisticInfo(stockInfoList, wishCoinAmount.get(), wishStockAmount.get());
 
-                send(WebSocketRouter.SEND_WORKER_STATISTIC, WebSocketMessageType.statistic, info);
+                send(WebSocketRouter.SEND_WORKER_STATISTIC, WebSocketMessageType.statisticInfo, info);
             }
         }, 1000, 1000);
     }

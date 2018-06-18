@@ -46,7 +46,7 @@ public class StatisticEngineListener {
 
         if (controlEngine.getSYSTEM_MODE().equals(SystemMode.worker)) {
             WishResultInfo info = new WishResultInfo(response.getType(), response.getAmount(), response.getStock());
-            clusterWorkerEngine.send(WebSocketRouter.SEND_WORKER_WISH_RESULT, WebSocketMessageType.statistic, info);
+            clusterWorkerEngine.send(WebSocketRouter.SEND_WORKER_WISH_RESULT, WebSocketMessageType.statisticInfo, info);
         }
         statisticEngine.record(response.getType(), response.getAmount(), response.getStock());
     }

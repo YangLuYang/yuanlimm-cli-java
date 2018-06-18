@@ -1,6 +1,10 @@
 package com.yu.tools.yuanlimm.engine;
 
+import com.yu.tools.yuanlimm.config.WebSocketRouter;
+import com.yu.tools.yuanlimm.dto.ws.WorkComputeInfo;
+import com.yu.tools.yuanlimm.enums.SystemMode;
 import com.yu.tools.yuanlimm.enums.SystemStatus;
+import com.yu.tools.yuanlimm.enums.WebSocketMessageType;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
@@ -32,6 +36,11 @@ public class MonitorEngine {
      */
     @Resource
     private ControlEngine controlEngine;
+    /**
+     * 集群Worker引擎
+     */
+    @Resource
+    private ClusterWorkerEngine clusterWorkerEngine;
     /**
      * 上次Hash速度
      */
@@ -87,8 +96,12 @@ public class MonitorEngine {
                 totalStock.get()));
 
         lastHashSpeed = (currentHashCount - lastHashCount);
-
         lastHashCount = currentHashCount;
         lastRequestSuccessCount = currentRequestSuccessCount;
+
+        if (controlEngine.getSYSTEM_MODE().equals(SystemMode.worker)) {
+            WorkComputeInfo info = new WorkComputeInfo(lastHashSpeed);
+            clusterWorkerEngine.send(WebSocketRouter.SEND_WORKER_COMPUTE, WebSocketMessageType.statisticInfo, info);
+        }
     }
 }

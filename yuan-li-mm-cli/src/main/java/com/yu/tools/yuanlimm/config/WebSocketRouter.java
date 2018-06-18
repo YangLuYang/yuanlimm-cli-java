@@ -23,9 +23,13 @@ public class WebSocketRouter {
     /**
      * 发送 - Worker监控
      */
-    public static final String SEND_WORKER_MONITOR = "/topic/ws/worker/monitor";
+    public static final String SEND_WORKER_MONITOR = "/topic/ws/worker/monitorInfo";
     /**
      * 发送 - Worker统计
      */
-    public static final String SEND_WORKER_STATISTIC = "/topic/ws/worker/statistic";
+    public static final String SEND_WORKER_STATISTIC = "/topic/ws/worker/statisticInfo";
+    /**
+     * 发送 - Worker计算
+     */
+    public static final String SEND_WORKER_COMPUTE = "/topic/ws/worker/computeInfo";
 }
