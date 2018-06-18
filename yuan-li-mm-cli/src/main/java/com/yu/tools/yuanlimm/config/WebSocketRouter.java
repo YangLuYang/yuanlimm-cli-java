@@ -13,6 +13,10 @@ public class WebSocketRouter {
      */
     public static final String SEND_WORKER_WISH_RESULT = "/topic/ws/worker/wishResult";
     /**
+     * 发送 - Worker许愿日志
+     */
+    public static final String SEND_WORKER_WISH_LOG = "/topic/ws/worker/wishLog";
+    /**
      * 发送 - Worker状态
      */
     public static final String SEND_WORKER_STATUS = "/topic/ws/worker/status";
