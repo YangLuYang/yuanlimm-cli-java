@@ -1,4 +1,4 @@
-package com.yu.tools.yuanlimm.dto;
+package com.yu.tools.yuanlimm.dto.ws;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.yu.tools.yuanlimm.dto;
+package com.yu.tools.yuanlimm.dto.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * 系统配置请求
+ * 系统配置响应
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SystemConfigRequest implements Serializable {
+public class SystemConfigResponse implements Serializable {
     /**
      * 计算线程
      */

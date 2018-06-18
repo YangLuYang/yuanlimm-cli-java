@@ -1,11 +1,11 @@
 package com.yu.tools.yuanlimm.domain;
 
-import com.yu.tools.yuanlimm.dto.StatisticInfoResponse;
-import com.yu.tools.yuanlimm.dto.Stock;
-import com.yu.tools.yuanlimm.dto.WishStockInfo;
+import com.yu.tools.yuanlimm.dto.api.StatisticInfoResponse;
+import com.yu.tools.yuanlimm.dto.api.WishStockInfo;
 import com.yu.tools.yuanlimm.engine.ControlEngine;
 import com.yu.tools.yuanlimm.engine.StatisticEngine;
 import com.yu.tools.yuanlimm.model.Message;
+import com.yu.tools.yuanlimm.model.Stock;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

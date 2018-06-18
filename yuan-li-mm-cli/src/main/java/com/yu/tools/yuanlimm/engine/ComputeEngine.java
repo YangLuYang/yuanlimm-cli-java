@@ -1,6 +1,6 @@
 package com.yu.tools.yuanlimm.engine;
 
-import com.yu.tools.yuanlimm.dto.WishRequest;
+import com.yu.tools.yuanlimm.dto.extra.WishRequest;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;

@@ -1,13 +1,13 @@
 package com.yu.tools.yuanlimm.engine;
 
 import com.yu.tools.yuanlimm.config.WebSocketRouter;
-import com.yu.tools.yuanlimm.dto.CommonWebSocketMessage;
-import com.yu.tools.yuanlimm.dto.Stock;
-import com.yu.tools.yuanlimm.dto.WorkStatisticInfo;
-import com.yu.tools.yuanlimm.dto.WorkerMonitorInfo;
+import com.yu.tools.yuanlimm.dto.ws.CommonWebSocketMessage;
+import com.yu.tools.yuanlimm.dto.ws.WorkStatisticInfo;
+import com.yu.tools.yuanlimm.dto.ws.WorkerMonitorInfo;
 import com.yu.tools.yuanlimm.enums.WebSocketMessageType;
 import com.yu.tools.yuanlimm.handler.CustomStompSessionHandler;
 import com.yu.tools.yuanlimm.model.PackedWebSocketMessage;
+import com.yu.tools.yuanlimm.model.Stock;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

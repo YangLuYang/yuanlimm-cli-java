@@ -1,10 +1,12 @@
 package com.yu.tools.yuanlimm.engine;
 
-import com.yu.tools.yuanlimm.dto.Stock;
-import com.yu.tools.yuanlimm.dto.StocksResponse;
+import com.yu.tools.yuanlimm.dto.extra.StocksResponse;
+import com.yu.tools.yuanlimm.dto.extra.WishResponse;
 import com.yu.tools.yuanlimm.entity.WorkerNode;
 import com.yu.tools.yuanlimm.enums.SystemStatus;
+import com.yu.tools.yuanlimm.model.Stock;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -36,7 +38,15 @@ public class ControlEngine {
      */
     @Resource(name = "restTemplate")
     private RestTemplate restTemplate;
-
+    /**
+     * HASH难度
+     */
+    @Getter
+    @Setter
+    private Integer HASH_HARD = 0;
+    /**
+     * Worker系统状态
+     */
     @Getter
     private Map<String, SystemStatus> workerSystemStatus = new HashMap<>();
 
@@ -121,5 +131,26 @@ public class ControlEngine {
      */
     public Stock getStockByCode(String code) {
         return stockMap.get(code);
+    }
+
+    /**
+     * 每30秒重置难度
+     */
+    @Scheduled(fixedDelay = 1000 * 20)
+    public void updateHashHard() {
+        Optional.ofNullable(this.getHashHard()).ifPresent(number -> this.HASH_HARD = number);
+    }
+
+    /**
+     * 获取难度
+     *
+     * @return 难度
+     */
+    private Integer getHashHard() {
+        WishResponse response = restTemplate.getForObject("https://www.yuanlimm.com/api/super_wishs", WishResponse.class);
+        if (response.getHard() != null) {
+            return response.getHard();
+        }
+        return null;
     }
 }

@@ -1,10 +1,10 @@
 package com.yu.tools.yuanlimm.domain;
 
-import com.yu.tools.yuanlimm.dto.Stock;
-import com.yu.tools.yuanlimm.dto.WishLogInfo;
+import com.yu.tools.yuanlimm.dto.api.WishLogInfo;
 import com.yu.tools.yuanlimm.engine.ControlEngine;
 import com.yu.tools.yuanlimm.engine.WishLogEngine;
 import com.yu.tools.yuanlimm.model.Message;
+import com.yu.tools.yuanlimm.model.Stock;
 import com.yu.tools.yuanlimm.model.WishLog;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

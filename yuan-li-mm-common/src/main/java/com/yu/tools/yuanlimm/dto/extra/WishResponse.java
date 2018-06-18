@@ -1,4 +1,4 @@
-package com.yu.tools.yuanlimm.dto;
+package com.yu.tools.yuanlimm.dto.extra;
 
 import com.yu.tools.yuanlimm.enums.WishAwardType;
 import lombok.AllArgsConstructor;
@@ -6,15 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
- * 许愿日志信息
+ * 许愿响应
  */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class WishLogInfo implements Serializable {
+public class WishResponse implements Serializable {
+    /**
+     * 许愿结果
+     */
+    private Boolean success;
     /**
      * 奖励类型
      */
@@ -24,11 +27,15 @@ public class WishLogInfo implements Serializable {
      */
     private Long amount;
     /**
+     * 消息
+     */
+    private String msg;
+    /**
+     * 难度
+     */
+    private Integer hard;
+    /**
      * 股票
      */
-    private Stock stock;
-    /**
-     * 时间
-     */
-    private Date date;
+    private String stock;
 }

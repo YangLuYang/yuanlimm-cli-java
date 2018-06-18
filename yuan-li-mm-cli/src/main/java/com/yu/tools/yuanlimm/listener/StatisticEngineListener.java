@@ -1,8 +1,8 @@
 package com.yu.tools.yuanlimm.listener;
 
 import com.yu.tools.yuanlimm.config.WebSocketRouter;
-import com.yu.tools.yuanlimm.dto.WishResponse;
-import com.yu.tools.yuanlimm.dto.WishResultInfo;
+import com.yu.tools.yuanlimm.dto.extra.WishResponse;
+import com.yu.tools.yuanlimm.dto.ws.WishResultInfo;
 import com.yu.tools.yuanlimm.engine.ClusterWorkerEngine;
 import com.yu.tools.yuanlimm.engine.ControlEngine;
 import com.yu.tools.yuanlimm.engine.StatisticEngine;

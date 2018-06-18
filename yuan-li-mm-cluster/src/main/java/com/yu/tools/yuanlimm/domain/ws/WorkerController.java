@@ -1,8 +1,8 @@
 package com.yu.tools.yuanlimm.domain.ws;
 
-import com.yu.tools.yuanlimm.dto.CommonWebSocketMessage;
-import com.yu.tools.yuanlimm.dto.WishResultInfo;
-import com.yu.tools.yuanlimm.dto.WorkerMonitorInfo;
+import com.yu.tools.yuanlimm.dto.ws.CommonWebSocketMessage;
+import com.yu.tools.yuanlimm.dto.ws.WishResultInfo;
+import com.yu.tools.yuanlimm.dto.ws.WorkerMonitorInfo;
 import com.yu.tools.yuanlimm.engine.ControlEngine;
 import com.yu.tools.yuanlimm.engine.MonitorEngine;
 import com.yu.tools.yuanlimm.engine.StatisticEngine;

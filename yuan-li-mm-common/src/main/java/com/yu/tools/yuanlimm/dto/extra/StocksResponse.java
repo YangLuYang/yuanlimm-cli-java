@@ -1,5 +1,6 @@
-package com.yu.tools.yuanlimm.dto;
+package com.yu.tools.yuanlimm.dto.extra;
 
+import com.yu.tools.yuanlimm.model.Stock;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

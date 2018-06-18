@@ -1,11 +1,11 @@
 package com.yu.tools.yuanlimm.engine;
 
-import com.yu.tools.yuanlimm.dto.Stock;
-import com.yu.tools.yuanlimm.dto.StocksResponse;
-import com.yu.tools.yuanlimm.dto.WishResponse;
+import com.yu.tools.yuanlimm.dto.extra.StocksResponse;
+import com.yu.tools.yuanlimm.dto.extra.WishResponse;
 import com.yu.tools.yuanlimm.enums.SystemMode;
 import com.yu.tools.yuanlimm.enums.SystemStatus;
 import com.yu.tools.yuanlimm.exception.BusinessException;
+import com.yu.tools.yuanlimm.model.Stock;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

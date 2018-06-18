@@ -1,6 +1,6 @@
 package com.yu.tools.yuanlimm.domain.api;
 
-import com.yu.tools.yuanlimm.dto.MonitorInfoResponse;
+import com.yu.tools.yuanlimm.dto.api.MonitorInfoResponse;
 import com.yu.tools.yuanlimm.engine.MonitorEngine;
 import com.yu.tools.yuanlimm.model.Message;
 import org.springframework.web.bind.annotation.GetMapping;

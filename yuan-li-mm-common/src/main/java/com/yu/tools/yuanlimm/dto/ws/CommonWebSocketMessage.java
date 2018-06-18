@@ -1,4 +1,4 @@
-package com.yu.tools.yuanlimm.dto;
+package com.yu.tools.yuanlimm.dto.ws;
 
 import com.yu.tools.yuanlimm.enums.WebSocketMessageType;
 import lombok.AllArgsConstructor;

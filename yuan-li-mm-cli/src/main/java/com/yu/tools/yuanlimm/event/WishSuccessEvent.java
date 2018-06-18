@@ -1,6 +1,6 @@
 package com.yu.tools.yuanlimm.event;
 
-import com.yu.tools.yuanlimm.dto.WishResponse;
+import com.yu.tools.yuanlimm.dto.extra.WishResponse;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 

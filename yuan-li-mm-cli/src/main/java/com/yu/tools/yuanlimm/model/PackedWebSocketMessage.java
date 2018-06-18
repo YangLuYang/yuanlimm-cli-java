@@ -1,6 +1,6 @@
 package com.yu.tools.yuanlimm.model;
 
-import com.yu.tools.yuanlimm.dto.CommonWebSocketMessage;
+import com.yu.tools.yuanlimm.dto.ws.CommonWebSocketMessage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

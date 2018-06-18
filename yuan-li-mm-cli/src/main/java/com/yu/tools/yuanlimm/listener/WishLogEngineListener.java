@@ -1,6 +1,6 @@
 package com.yu.tools.yuanlimm.listener;
 
-import com.yu.tools.yuanlimm.dto.WishResponse;
+import com.yu.tools.yuanlimm.dto.extra.WishResponse;
 import com.yu.tools.yuanlimm.engine.WishLogEngine;
 import com.yu.tools.yuanlimm.event.WishSuccessEvent;
 import org.springframework.context.event.EventListener;

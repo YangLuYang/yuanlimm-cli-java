@@ -1,7 +1,7 @@
 package com.yu.tools.yuanlimm.engine;
 
-import com.yu.tools.yuanlimm.dto.WishRequest;
-import com.yu.tools.yuanlimm.dto.WishResponse;
+import com.yu.tools.yuanlimm.dto.extra.WishRequest;
+import com.yu.tools.yuanlimm.dto.extra.WishResponse;
 import com.yu.tools.yuanlimm.event.WishSuccessEvent;
 import com.yu.tools.yuanlimm.util.MinuteCounter;
 import lombok.Getter;

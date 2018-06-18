@@ -1,7 +1,7 @@
 package com.yu.tools.yuanlimm.engine;
 
-import com.yu.tools.yuanlimm.dto.MonitorInfoResponse;
-import com.yu.tools.yuanlimm.dto.WorkerMonitorInfo;
+import com.yu.tools.yuanlimm.dto.api.MonitorInfoResponse;
+import com.yu.tools.yuanlimm.dto.ws.WorkerMonitorInfo;
 import com.yu.tools.yuanlimm.entity.WorkerNode;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

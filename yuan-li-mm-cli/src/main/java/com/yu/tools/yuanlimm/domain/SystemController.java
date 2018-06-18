@@ -1,7 +1,7 @@
 package com.yu.tools.yuanlimm.domain;
 
-import com.yu.tools.yuanlimm.dto.SystemConfigRequest;
-import com.yu.tools.yuanlimm.dto.SystemConfigResponse;
+import com.yu.tools.yuanlimm.dto.api.SystemConfigRequest;
+import com.yu.tools.yuanlimm.dto.api.SystemConfigResponse;
 import com.yu.tools.yuanlimm.engine.ControlEngine;
 import com.yu.tools.yuanlimm.enums.SystemStatus;
 import com.yu.tools.yuanlimm.model.Message;
