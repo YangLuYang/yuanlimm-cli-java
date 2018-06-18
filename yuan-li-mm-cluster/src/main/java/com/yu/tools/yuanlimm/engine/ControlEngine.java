@@ -26,6 +26,11 @@ import java.util.*;
 @Component
 public class ControlEngine {
     /**
+     * Worker系统状态
+     */
+    @Getter
+    private Map<String, SystemStatus> workerSystemStatus = new HashMap<>();
+    /**
      * 股票列表
      */
     private List<Stock> stockList = new ArrayList<>();
@@ -44,11 +49,6 @@ public class ControlEngine {
     @Getter
     @Setter
     private Integer HASH_HARD = 0;
-    /**
-     * Worker系统状态
-     */
-    @Getter
-    private Map<String, SystemStatus> workerSystemStatus = new HashMap<>();
 
     /**
      * Init
