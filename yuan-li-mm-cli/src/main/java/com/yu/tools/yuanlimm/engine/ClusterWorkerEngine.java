@@ -102,7 +102,7 @@ public class ClusterWorkerEngine {
                 System.out.println("连接超时，程序即将退出");
                 System.exit(1);
             }
-        }, 5000L);
+        }, 10 * 1000L);
 
         ListenableFuture<StompSession> connect = stompClient.connect(url, (WebSocketHttpHeaders) null, headers,
                 customStompSessionHandler);

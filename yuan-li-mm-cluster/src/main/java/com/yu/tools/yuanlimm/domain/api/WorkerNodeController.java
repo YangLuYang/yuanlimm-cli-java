@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,7 +29,9 @@ public class WorkerNodeController {
      */
     @Resource
     private MonitorEngine monitorEngine;
-
+    /**
+     * 控制引擎
+     */
     @Resource
     private ControlEngine controlEngine;
     /**
@@ -47,6 +50,7 @@ public class WorkerNodeController {
         Map<String, WorkerNode> onlineWorker = clusterCentralEngine.getOnlineWorker();
 
         List<WorkerNodeInfo> collect = onlineWorker.values().stream()
+                .sorted(Comparator.comparing(WorkerNode::getName))
                 .map(workerNode -> {
                     WorkerMonitorInfo workerMonitorInfo = monitorEngine.getWorkerMonitorInfo().get(workerNode.getName());
                     SystemStatus systemStatus = controlEngine.getWorkerSystemStatus().get(workerNode.getName());
