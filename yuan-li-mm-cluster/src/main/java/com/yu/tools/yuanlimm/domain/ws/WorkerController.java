@@ -2,6 +2,7 @@ package com.yu.tools.yuanlimm.domain.ws;
 
 import com.yu.tools.yuanlimm.dto.ws.CommonWebSocketMessage;
 import com.yu.tools.yuanlimm.dto.ws.WishResultInfo;
+import com.yu.tools.yuanlimm.dto.ws.WorkComputeInfo;
 import com.yu.tools.yuanlimm.dto.ws.WorkerMonitorInfo;
 import com.yu.tools.yuanlimm.engine.ControlEngine;
 import com.yu.tools.yuanlimm.engine.MonitorEngine;
@@ -57,6 +58,17 @@ public class WorkerController {
     @MessageMapping("/monitorInfo")
     public void workerMonitorInfo(CommonWebSocketMessage<WorkerMonitorInfo> message, Principal principal) {
         monitorEngine.updateWorkerMonitorInfo((WorkerNode) principal, message.getData());
+    }
+
+    /**
+     * Worker计算信息
+     *
+     * @param message   消息
+     * @param principal principal
+     */
+    @MessageMapping("/computeInfo")
+    public void workerComputeInfo(CommonWebSocketMessage<WorkComputeInfo> message, Principal principal) {
+        monitorEngine.getCurrentHashCount().getAndAdd(message.getData().getCurrentSpeed());
     }
 
     /**
