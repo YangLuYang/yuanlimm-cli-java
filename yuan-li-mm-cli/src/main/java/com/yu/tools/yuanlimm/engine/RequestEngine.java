@@ -127,17 +127,6 @@ public class RequestEngine {
                     requestSuccessMinuteCounter.increment();
 
                     applicationContext.publishEvent(new WishSuccessEvent(this, response));
-
-                    switch (response.getType()) {
-                        case coin:
-                            monitorEngine.getTotalCoin().getAndAdd(response.getAmount());
-                            break;
-                        case stock:
-                            monitorEngine.getTotalStock().getAndAdd(response.getAmount());
-                            break;
-                        default:
-                            throw new IllegalArgumentException();
-                    }
                 } else {
                     log.warn("RequestFail:\t" + response);
                 }

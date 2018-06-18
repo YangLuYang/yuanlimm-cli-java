@@ -12,7 +12,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Engine - 监控引擎
@@ -37,6 +36,11 @@ public class MonitorEngine {
     @Resource
     private ControlEngine controlEngine;
     /**
+     * 统计引擎
+     */
+    @Resource
+    private StatisticEngine statisticEngine;
+    /**
      * 集群Worker引擎
      */
     @Resource
@@ -54,16 +58,6 @@ public class MonitorEngine {
      * 上次请求成功计数
      */
     private Long lastRequestSuccessCount = 0L;
-    /**
-     * 总援力
-     */
-    @Getter
-    private AtomicLong totalCoin = new AtomicLong(0);
-    /**
-     * 总股票
-     */
-    @Getter
-    private AtomicLong totalStock = new AtomicLong(0);
 
     /**
      * 统计
@@ -74,7 +68,8 @@ public class MonitorEngine {
                 || controlEngine.getSYSTEM_STATUS().equals(SystemStatus.needConfig)) {
             return;
         }
-
+        Long totalStock = statisticEngine.getWishStockAmount().get();
+        Long totalCoin = statisticEngine.getWishCoinAmount().get();
         Long currentHashCount = computeEngine.getHashCounter().get();
         Long currentRequestSuccessCount = requestEngine.getRequestSuccessCounter().get();
 
@@ -92,8 +87,8 @@ public class MonitorEngine {
                 (currentHashCount - lastHashCount) / 1000000.00,
                 (currentRequestSuccessCount - lastRequestSuccessCount),
                 controlEngine.getHASH_HARD(),
-                totalCoin.get() / 100.0,
-                totalStock.get()));
+                totalCoin / 100.0,
+                totalStock));
 
         lastHashSpeed = (currentHashCount - lastHashCount);
         lastHashCount = currentHashCount;
