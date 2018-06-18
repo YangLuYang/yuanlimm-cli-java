@@ -31,7 +31,7 @@ public class CostumeChannelInterceptorAdapter extends ChannelInterceptorAdapter 
             if (StringUtils.isNotBlank(accessor.getLogin())) {
                 WorkerNode node = new WorkerNode(accessor.getLogin(), accessor.getSessionId());
                 if (clusterCentralEngine.nodeNameExist(node)) {
-                    System.out.println(String.format("Worker:%s exist.\t Reject.", node.getName()));
+                    System.out.println(String.format("Worker: %s name exist.\t Reject.", node.getName()));
                     return null;
                 }
 
