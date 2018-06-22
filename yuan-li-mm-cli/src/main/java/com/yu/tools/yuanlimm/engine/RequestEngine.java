@@ -9,7 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -103,8 +106,15 @@ public class RequestEngine {
                 continue;
             }
 
-            HttpHeaders requestHeaders = new HttpHeaders();
-            HttpEntity<WishRequest> requestEntity = new HttpEntity<>(request, requestHeaders);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            params.add("cheer_word", request.getCheer_word());
+            params.add("address", request.getAddress());
+            params.add("love_power", request.getLove_power().toString());
+            params.add("code", request.getCode());
+
+            HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
 
             try {
                 requestCounter.getAndIncrement();
