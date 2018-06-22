@@ -1,10 +1,11 @@
 # 援力满满 - 许愿工具的Java实现
 ## 介绍
 本项目是 [援力满满 二次元虚拟股市](https://www.yuanlimm.com/) 基于[官方工具](https://github.com/bydmm/yuanlimm-cli)的Java实现版本  
-本工具具有auto,console,web三种模式:
+本工具具有auto,console,web,worker四种模式:
 * auto模式自动判断启动参数是否满足运算条件, 满足则会自动开始.
 * web模式通过web页面配置启动参数.
 * console模式通过启动参数或者控制台配置运行参数.
+* worker模式用于连接到计算集群, 能够统一统计与管理. (Beta)
 
 Web端实现了网页的系统运行状态监控, 许愿统计, 许愿日志和配置热更新.  
 通过console模式配置的参数也能通过web页面热更新.
@@ -60,10 +61,32 @@ java -jar ./xxxx.jar \
 --config.walletAddress=xxxx
 ```
 
---config.stockCode: 钱包地址, https://www.yuanlimm.com/#/profile
---config.computeThread: 计算线程数，建议不超过CPU核心数(超线程的核心不算在内)
---config.cheerWord: 应援词
---config.walletAddress: 股票代码，比如英梨梨的地址：https://www.yuanlimm.com/#/stock/ERIRI，的股票代码是ERIRI，
+| 参数 | 说明 | 备注 |
+| --- | --- | --- |
+| --config.stockCode | 钱包地址, https://www.yuanlimm.com/#/profile | N/A |
+| --config.computeThread | 计算线程数，建议不超过CPU核心数 | 超线程的核心不算在内 |
+| --config.cheerWord | 应援词 | N/A |
+| --config.walletAddress | 股票代码 | 比如英梨梨的地址：https://www.yuanlimm.com/#/stock/ERIRI，的股票代码是ERIRI |
+
+### Worker模式(Beta) ```新增```
+v6版本新增Worker模式, 此模式用于连接集群版程序, 提供集群内Worker节点的统一统计, 远程配置管理Worker节点的功能.  
+`目前此功能处于测试阶段, 如果使用中发现有任何问题, 欢迎给予反馈.`
+```bash
+java -jar ./xxxx.jar \
+--config.systemMode=worker \
+--config.workerName=Worker-node-1 \
+--config.workerHost=127.0.0.1 \
+--config.workerPort=8080 \
+--config.walletAddress=xxxx \
+--config.computeThread=2 \
+--config.stockCode=ERIRI
+```
+
+| 参数 | 说明 | 备注 |
+| --- | --- | --- |
+| --config.workerName | Worker节点名称, 用于集群端管理和区分各个节点. | Worker名称在单个集群内唯一, 重复的名称将被拒绝接入集群 |
+| --config.workerHost | 集群端主机地址 | IP或域名 |
+| --config.workerPort | 集群端端口号 | N/A |
 
 ## 截图
 * Web端
