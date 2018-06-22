@@ -63,10 +63,10 @@ java -jar ./xxxx.jar \
 
 | 参数 | 说明 | 备注 |
 | --- | --- | --- |
-| --config.stockCode | 钱包地址, https://www.yuanlimm.com/#/profile | N/A |
-| --config.computeThread | 计算线程数，建议不超过CPU核心数 | 超线程的核心不算在内 |
-| --config.cheerWord | 应援词 | N/A |
-| --config.walletAddress | 股票代码 | 比如英梨梨的地址：https://www.yuanlimm.com/#/stock/ERIRI，的股票代码是ERIRI |
+| config.stockCode | 钱包地址, https://www.yuanlimm.com/#/profile | N/A |
+| config.computeThread | 计算线程数，建议不超过CPU核心数 | 超线程的核心不算在内 |
+| config.cheerWord | 应援词 | N/A |
+| config.walletAddress | 股票代码 | 比如英梨梨的地址：https://www.yuanlimm.com/#/stock/ERIRI，的股票代码是ERIRI |
 
 ### Worker模式(Beta) ```新增```
 v6版本新增Worker模式, 此模式用于连接集群版程序, 提供集群内Worker节点的统一统计, 远程配置管理Worker节点的功能.  
@@ -84,9 +84,9 @@ java -jar ./xxxx.jar \
 
 | 参数 | 说明 | 备注 |
 | --- | --- | --- |
-| --config.workerName | Worker节点名称, 用于集群端管理和区分各个节点. | Worker名称在单个集群内唯一, 重复的名称将被拒绝接入集群 |
-| --config.workerHost | 集群端主机地址 | IP或域名 |
-| --config.workerPort | 集群端端口号 | N/A |
+| config.workerName | Worker节点名称, 用于集群端管理和区分各个节点. | Worker名称在单个集群内唯一, 重复的名称将被拒绝接入集群 |
+| config.workerHost | 集群端主机地址 | IP或域名 |
+| config.workerPort | 集群端端口号 | N/A |
 
 ## 截图
 * Web端
