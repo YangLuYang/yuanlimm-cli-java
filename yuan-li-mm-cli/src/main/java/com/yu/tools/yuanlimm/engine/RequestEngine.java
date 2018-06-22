@@ -109,7 +109,7 @@ public class RequestEngine {
             try {
                 requestCounter.getAndIncrement();
 
-                WishResponse response = restTemplate.postForObject("https://www.yuanlimm.com/api/super_wishs",
+                WishResponse response = restTemplate.postForObject("http://yuanlimm-server.yuanlimm.com/api/super_wishs",
                         requestEntity, WishResponse.class);
 
                 if (response.getSuccess() == null) {

@@ -291,7 +291,7 @@ public class ControlEngine {
      * @return 难度
      */
     private Integer getHashHard() {
-        WishResponse response = restTemplate.getForObject("https://www.yuanlimm.com/api/super_wishs", WishResponse.class);
+        WishResponse response = restTemplate.getForObject("http://yuanlimm-server.yuanlimm.com/api/super_wishs", WishResponse.class);
         if (response.getHard() != null) {
             return response.getHard();
         }
